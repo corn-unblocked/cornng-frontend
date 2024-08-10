@@ -1,9 +1,15 @@
 <!DOCTYPE html>
 <html>
-    <body>
-        <button id="inject">Inject</button>
+    <head>
         <script>
-            window.body.innerHTML = "<iframe style=\"border: none; position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;\" src=\"https://corn-ng.web.app\"/>";
+            function inject() {
+                let newWindow = window.open();
+                let html = "<iframe style=\"border: none; position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;\" src=\"https://corn-ng.web.app\" />";
+                newWindow.document.body.innerHTML = html;
+            }
         </script>
+    </head>
+    <body>
+        <button onclick="inject();" style="width: 50vw; height: 50vh; margin-left:25vw; margin-top:25vh;">Inject</button>
     </body>
 </html>
