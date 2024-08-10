@@ -4,16 +4,21 @@
         <title>CornNG Pr0xy</title>
         <link rel="stylesheet" href="index.css"/>
         <script src="redirect.js"></script>
+        <script src="config.js"></script>
         <script src="baremux/index.js" defer></script>
         <script src="libcurl/index.js" defer></script>
         <script src="uv/uv.bundle.js" defer></script>
         <script src="uv/uv.config.js" defer></script>
         <script src="proxy.js" defer></script>
+        <script src="index.js" defer></script>
     </head>
     <body>
-        <input id="serverAddress" type="text" value="wss://wisp.mercurywork.shop/"/>
-        <input id="targetAddress" type="text" value="https://google.com"/>
-        <button id="startButton">Start</button>
+        <div class="verticalLayout">
+            <select id="proxyUrl"></select>
+            <input id="serverAddress" type="text"/>
+            <input id="targetAddress" type="text" value="https://google.com"/>
+            <button id="startButton">Start</button>
+        </div>
         <iframe id="proxyIframe" style="display: none;"/>
     </body>
 </html>

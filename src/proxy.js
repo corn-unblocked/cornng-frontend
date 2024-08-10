@@ -23,22 +23,6 @@ async function registerSW() {
     await navigator.serviceWorker.register(stockSW);
 }
 
-
-/**
- * @type {HTMLInputElement}
- */
-const serverAddress = document.getElementById("serverAddress");
-
-/**
- * @type {HTMLInputElement}
- */
-const targetAddress = document.getElementById("targetAddress");
-
-/**
- * @type {HTMLButtonElement}
- */
-const startButton = document.getElementById("startButton");
-
 const connection = new BareMux.BareMuxConnection("/baremux/worker.js")
 
 startButton.addEventListener("click", async (event) => {
@@ -55,9 +39,11 @@ startButton.addEventListener("click", async (event) => {
 
     let frame = document.getElementById("proxyIframe");
     frame.style.display = "block";
-    let wispUrl = serverAddress.value;
+    let wispUrl = new URL(serverAddress.value);
+    // set to websocket protocol
+    wispUrl.protocol = wispUrl.protocol === "http:" ? "ws:" : "wss:";
     if (await connection.getTransport() !== "/libcurl/index.mjs") {
-        await connection.setTransport("/libcurl/index.mjs", [{wisp: wispUrl}]);
+        await connection.setTransport("/libcurl/index.mjs", [{wisp: wispUrl.href}]);
     }
     frame.src = __uv$config.prefix + __uv$config.encodeUrl(url);
 });
