@@ -9,7 +9,8 @@ function inIframe () {
     }
 }
 
-if (!inIframe())
+// add small debug manual override
+if (!inIframe() && !window.location.href.includes("?debug=true"))
 {
     window.location.replace(SITES_URL);
 }
