@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CornNG Pr0xy</title>
+        <link rel="stylesheet" href="index.css"/>
+        <script src="baremux/index.js" defer></script>
+        <script src="libcurl/index.js" defer></script>
+        <script src="uv/uv.bundle.js" defer></script>
+        <script src="uv/uv.config.js" defer></script>
+        <script src="proxy.js" defer></script>
+    </head>
+    <body>
+        <input id="serverAddress" type="text" value="wss://wisp.mercurywork.shop/"/>
+        <input id="targetAddress" type="text" value="https://google.com"/>
+        <button id="startButton">Start</button>
+        <iframe id="proxyIframe" style="display: none;"/>
+    </body>
+</html>
