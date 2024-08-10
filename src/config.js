@@ -1,13 +1,22 @@
-const proxyUrls = {
+const wispProxyUrls = {
     "Custom": "",
     "Mercury Network": "wss://wisp.mercurywork.shop/",
     "Aluu.xyz": "wss://aluu.xyz/wisp/",
     "Incognito": "wss://incog.works/wisp/",
 }
 
+const bareProxyUrls = {
+    "Custom": "",
+    "Aluu.xyz": "https://aluu.xyz/bare/",
+    "Incognito": "https://incog.works/bare/",
+}
+
 const config = {
-    proxyIndex: 1,
-    customProxy: "",
+    useBare: false,
+    wispProxyIndex: 1,
+    wispCustomProxy: "",
+    bareProxyIndex: 1,
+    bareCustomProxy: "",
 }
 
 function loadConfig() {

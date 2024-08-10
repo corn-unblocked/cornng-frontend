@@ -1,4 +1,4 @@
-div.verticalLayout * {
+div.verticalLayout > * {
     display: block;
 }
 

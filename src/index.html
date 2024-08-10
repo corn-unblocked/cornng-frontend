@@ -6,6 +6,7 @@
         <script src="redirect.js"></script>
         <script src="config.js"></script>
         <script src="baremux/index.js" defer></script>
+        <script src="baremod/index.js" defer></script>
         <script src="libcurl/index.js" defer></script>
         <script src="uv/uv.bundle.js" defer></script>
         <script src="uv/uv.config.js" defer></script>
@@ -14,7 +15,14 @@
     </head>
     <body>
         <div class="verticalLayout">
-            <select id="proxyUrl"></select>
+            <div>
+                <select id="proxyUrl"></select>
+                <select id="proxyType">
+                    <option id="wisp">Wisp/Libcurl</option>
+                    <option id="bare">Bare</option>
+                </select>
+                <p title="Wisp is more stable and less likely to be blocked, but Bare is a bit faster" style="display: inline;">?</p>
+            </div>
             <input id="serverAddress" type="text"/>
             <input id="targetAddress" type="text" value="https://google.com"/>
             <button id="startButton">Start</button>

@@ -4,6 +4,11 @@
 const proxyUrlSelector = document.getElementById("proxyUrl");
 
 /**
+ * @type {HTMLSelectElement}
+ */
+const proxyTypeSelector = document.getElementById("proxyType");
+
+/**
  * @type {HTMLInputElement}
  */
 const serverAddress = document.getElementById("serverAddress");
@@ -19,19 +24,25 @@ const targetAddress = document.getElementById("targetAddress");
 const startButton = document.getElementById("startButton");
 
 function updateServerAddress() {
+    let proxyUrls = config.useBare ? bareProxyUrls : wispProxyUrls;
     if (proxyUrlSelector.value === "Custom") {
-        serverAddress.value = config.customProxy;
+        serverAddress.value = config.useBare ? config.bareCustomProxy : config.wispCustomProxy;
         serverAddress.disabled = false;
     } else {
         serverAddress.value = proxyUrls[proxyUrlSelector.value];
         serverAddress.disabled = true;
     }
-    config.proxyIndex = proxyUrlSelector.selectedIndex;
+    if (config.useBare) {
+        config.bareProxyIndex = proxyUrlSelector.selectedIndex;
+    } else {
+        config.wispProxyIndex = proxyUrlSelector.selectedIndex;
+    }
     saveConfig();
 }
 
 function generateSelectableUrls() {
-    while (proxyUrlSelector.hasChildNodes()) proxyUrlSelector.removeChild();
+    while (proxyUrlSelector.hasChildNodes()) proxyUrlSelector.removeChild(proxyUrlSelector.firstChild);
+    let proxyUrls = config.useBare ? bareProxyUrls : wispProxyUrls;
     for (let proxy in proxyUrls) {
         let option = document.createElement("option");
         option.innerHTML = proxy;
@@ -41,13 +52,25 @@ function generateSelectableUrls() {
 }
 
 function updateCustomProxy() {
-    config.customProxy = serverAddress.value;
+    if (config.useBare) {
+        config.bareCustomProxy = serverAddress.value;
+    } else {
+        config.wispCustomProxy = serverAddress.value;
+    }
+    saveConfig();
+}
+
+function updateProxyType() {
+    config.useBare = proxyTypeSelector.selectedIndex == 1;
+    generateSelectableUrls();
+    proxyUrlSelector.selectedIndex = config.useBare ? config.bareProxyIndex : config.wispProxyIndex;
+    updateServerAddress();
     saveConfig();
 }
 
 proxyUrlSelector.addEventListener("change", updateServerAddress);
+proxyTypeSelector.addEventListener("change", updateProxyType)
 serverAddress.addEventListener("change", updateCustomProxy);
 
-generateSelectableUrls();
-proxyUrlSelector.selectedIndex = config.proxyIndex;
-updateServerAddress();
+proxyTypeSelector.selectedIndex = config.useBare ? 1 : 0;
+updateProxyType();

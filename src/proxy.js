@@ -39,10 +39,13 @@ startButton.addEventListener("click", async (event) => {
 
     let frame = document.getElementById("proxyIframe");
     frame.style.display = "block";
-    let wispUrl = new URL(serverAddress.value);
-    // set to websocket protocol
-    wispUrl.protocol = wispUrl.protocol === "http:" ? "ws:" : "wss:";
-    if (await connection.getTransport() !== "/libcurl/index.mjs") {
+    if (config.useBare && await connection.getTransport() !== "/baremod/index.mjs") {
+        let bareUrl = new URL(serverAddress.value);
+        await connection.setTransport("/baremod/index.mjs", [bareUrl.href]);
+    } else if (await connection.getTransport() !== "/libcurl/index.mjs") {
+        let wispUrl = new URL(serverAddress.value);
+        // set to websocket protocol
+        wispUrl.protocol = wispUrl.protocol === "http:" ? "ws:" : "wss:";
         await connection.setTransport("/libcurl/index.mjs", [{wisp: wispUrl.href}]);
     }
     frame.src = __uv$config.prefix + __uv$config.encodeUrl(url);
