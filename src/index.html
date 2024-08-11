@@ -8,7 +8,6 @@
         <script src="baremux/index.js" defer></script>
         <script src="baremod/index.js" defer></script>
         <script src="libcurl/index.js" defer></script>
-        <script src="epoxy/index.js" defer></script>
         <script src="uv/uv.bundle.js" defer></script>
         <script src="uv/uv.config.light.js" defer></script>
         <script src="proxy.js" defer></script>
@@ -20,11 +19,10 @@
             <div class="hbox">
                 <select id="proxyUrl" class="button"></select>
                 <select id="proxyType" class="button">
-                    <option id="epoxy">Epoxy/Wisp</option>
-                    <option id="libcurl">Libcurl/Wisp</option>
+                    <option id="wisp">Wisp/Libcurl</option>
                     <option id="bare">Bare</option>
                 </select>
-                <p title="Epoxy is fast, but may not work. Wisp is more stable, but a bit slower. Bare is the fastest, but likely will be blocked."
+                <p title="Wisp is more stable and less likely to be blocked, but Bare is a bit faster"
                    style="font-size: 20px; display: inline; user-select: none;">
                    (?)
                 </p>

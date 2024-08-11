@@ -1,11 +1,3 @@
-const currentProxyConfig = {
-    proxyType: 0,
-    isBare: false,
-    proxyUrls: wispProxyUrls,
-    proxyIndex: config.wispProxyIndex,
-    customProxy: config.wispCustomProxy,
-}
-
 /**
  * @type {HTMLSelectElement}
  */
@@ -32,66 +24,53 @@ const targetAddress = document.getElementById("targetAddress");
 const startButton = document.getElementById("startButton");
 
 function updateServerAddress() {
+    let proxyUrls = config.useBare ? bareProxyUrls : wispProxyUrls;
     if (proxyUrlSelector.value === "custom") {
-        serverAddress.value = currentProxyConfig.customProxy;
+        serverAddress.value = config.useBare ? config.bareCustomProxy : config.wispCustomProxy;
         serverAddress.disabled = false;
     } else {
         serverAddress.value = proxyUrlSelector.value;
         serverAddress.disabled = true;
     }
-    currentProxyConfig.proxyIndex = proxyUrlSelector.selectedIndex;
-    saveCurrentProxyConfig();
+    if (config.useBare) {
+        config.bareProxyIndex = proxyUrlSelector.selectedIndex;
+    } else {
+        config.wispProxyIndex = proxyUrlSelector.selectedIndex;
+    }
+    saveConfig();
 }
 
 function generateSelectableUrls() {
     while (proxyUrlSelector.hasChildNodes()) proxyUrlSelector.removeChild(proxyUrlSelector.firstChild);
-    for (let proxy in currentProxyConfig.proxyUrls) {
+    let proxyUrls = config.useBare ? bareProxyUrls : wispProxyUrls;
+    for (let proxy in proxyUrls) {
         let option = document.createElement("option");
-        option.innerHTML = currentProxyConfig.proxyUrls[proxy];
+        option.innerHTML = proxyUrls[proxy];
         option.value = proxy;
         proxyUrlSelector.appendChild(option);
     }
 }
 
 function updateCustomProxy() {
-    currentProxyConfig.customProxy = serverAddress.value;
-    saveCurrentProxyConfig();
-}
-
-function saveCurrentProxyConfig() {
-    if (currentProxyConfig.isBare) {
-        config.bareProxyIndex = currentProxyConfig.proxyIndex;
-        config.bareCustomProxy = currentProxyConfig.customProxy;
+    if (config.useBare) {
+        config.bareCustomProxy = serverAddress.value;
     } else {
-        config.wispProxyIndex = currentProxyConfig.proxyIndex;
-        config.wispCustomProxy = currentProxyConfig.customProxy;
+        config.wispCustomProxy = serverAddress.value;
     }
     saveConfig();
 }
 
 function updateProxyType() {
-    config.proxyType = proxyTypeSelector.selectedIndex;
-
-    // save old stuff if proxy type changes
-    if (currentProxyConfig.proxyType != config.proxyType)
-    {
-        saveCurrentProxyConfig();
-    }
-
-    currentProxyConfig.proxyType = config.proxyType;
-    currentProxyConfig.isBare = currentProxyConfig.proxyType === 2;
-    currentProxyConfig.proxyUrls = currentProxyConfig.isBare ? bareProxyUrls : wispProxyUrls;
-    currentProxyConfig.proxyIndex = currentProxyConfig.isBare ? config.bareProxyIndex : config.wispProxyIndex;
-    currentProxyConfig.customProxy = currentProxyConfig.isBare ? config.bareCustomProxy : config.wispCustomProxy;
-
+    config.useBare = proxyTypeSelector.selectedIndex == 1;
     generateSelectableUrls();
-    proxyUrlSelector.selectedIndex = currentProxyConfig.proxyIndex;
+    proxyUrlSelector.selectedIndex = config.useBare ? config.bareProxyIndex : config.wispProxyIndex;
     updateServerAddress();
+    saveConfig();
 }
 
 proxyUrlSelector.addEventListener("change", updateServerAddress);
 proxyTypeSelector.addEventListener("change", updateProxyType)
 serverAddress.addEventListener("change", updateCustomProxy);
 
-proxyTypeSelector.selectedIndex = config.proxyType;
+proxyTypeSelector.selectedIndex = config.useBare ? 1 : 0;
 updateProxyType();

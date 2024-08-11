@@ -12,8 +12,7 @@ const bareProxyUrls = {
 }
 
 const config = {
-    /// 0 = epoxy, 1 = libcurl, 2 = bare
-    proxyType: 0,
+    useBare: false,
     wispProxyIndex: 1,
     wispCustomProxy: "",
     bareProxyIndex: 1,

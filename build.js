@@ -4,20 +4,19 @@ let buildOptions = {
     targetPath: "public"
 }
 
-function copyDistFiles(loc, dest) {
-    shell.mkdir("-p", buildOptions.targetPath + dest);
-    shell.cp("node_modules/" + loc + "/dist/*.{js,mjs}", buildOptions.targetPath + dest);
-}
 
 shell.rm("-rf", buildOptions.targetPath);
 shell.mkdir(buildOptions.targetPath);
+shell.mkdir(buildOptions.targetPath + "/libcurl");
+shell.mkdir(buildOptions.targetPath + "/baremux");
+shell.mkdir(buildOptions.targetPath + "/baremod");
+shell.mkdir(buildOptions.targetPath + "/uv");
 
 shell.echo("Building CornNG Frontend with build options " + JSON.stringify(buildOptions));
 
-copyDistFiles("@mercuryworkshop/epoxy-transport", "/epoxy");
-copyDistFiles("@mercuryworkshop/libcurl-transport", "/libcurl");
-copyDistFiles("@mercuryworkshop/bare-as-module3", "/baremod");
-copyDistFiles("@mercuryworkshop/bare-mux", "/baremux");
-copyDistFiles("@titaniumnetwork-dev/ultraviolet", "/uv");
+shell.cp("node_modules/@mercuryworkshop/libcurl-transport/dist/*", buildOptions.targetPath + "/libcurl");
+shell.cp("node_modules/@mercuryworkshop/bare-as-module3/dist/*", buildOptions.targetPath + "/baremod");
+shell.cp("node_modules/@mercuryworkshop/bare-mux/dist/*", buildOptions.targetPath + "/baremux");
+shell.cp("node_modules/@titaniumnetwork-dev/ultraviolet/dist/*", buildOptions.targetPath + "/uv");
 
 shell.cp("-rf", "src/*", buildOptions.targetPath);
