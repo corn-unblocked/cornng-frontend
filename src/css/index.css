@@ -2,6 +2,10 @@
     font-family: sans-serif;
 }
 
+body {
+    background: whitesmoke;
+}
+
 img.banner {
     margin: 10vh auto;
     width: 50vw;
