@@ -25,11 +25,11 @@ const startButton = document.getElementById("startButton");
 
 function updateServerAddress() {
     let proxyUrls = config.useBare ? bareProxyUrls : wispProxyUrls;
-    if (proxyUrlSelector.value === "Custom") {
+    if (proxyUrlSelector.value === "custom") {
         serverAddress.value = config.useBare ? config.bareCustomProxy : config.wispCustomProxy;
         serverAddress.disabled = false;
     } else {
-        serverAddress.value = proxyUrls[proxyUrlSelector.value];
+        serverAddress.value = proxyUrlSelector.value;
         serverAddress.disabled = true;
     }
     if (config.useBare) {
@@ -45,7 +45,7 @@ function generateSelectableUrls() {
     let proxyUrls = config.useBare ? bareProxyUrls : wispProxyUrls;
     for (let proxy in proxyUrls) {
         let option = document.createElement("option");
-        option.innerHTML = proxy;
+        option.innerHTML = proxyUrls[proxy];
         option.value = proxy;
         proxyUrlSelector.appendChild(option);
     }

@@ -1,0 +1,57 @@
+* {
+    font-family: sans-serif;
+}
+
+img.banner {
+    margin: 10vh auto;
+    width: 50vw;
+}
+
+div.vbox {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+div.hbox {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    column-gap: 10px;
+}
+
+.fillScreen {
+    border: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+.button {
+    box-sizing: border-box;
+    border: none;
+    margin: 10px auto;
+    width: 200px;
+    transition-duration: 0.5s;
+    background-color: gainsboro;
+    color: black;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+input.button {
+    width: 500px;
+}
+
+.button:hover, .button:active {
+    background-color: #eff21b;
+}
+
+.button:disabled {
+    background-color: darkgray;
+}

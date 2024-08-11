@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>CornNG Pr0xy</title>
-        <link rel="stylesheet" href="index.css"/>
+        <link rel="stylesheet" href="css/index.css"/>
         <script src="redirect.js"></script>
         <script src="config.js"></script>
         <script src="baremux/index.js" defer></script>
@@ -14,19 +14,23 @@
         <script src="index.js" defer></script>
     </head>
     <body>
-        <div class="verticalLayout">
-            <div>
-                <select id="proxyUrl"></select>
-                <select id="proxyType">
+        <div class="vbox fillScreen" style="margin: auto;">
+            <img class="banner" src="img/corn.svg"/>
+            <div class="hbox">
+                <select id="proxyUrl" class="button"></select>
+                <select id="proxyType" class="button">
                     <option id="wisp">Wisp/Libcurl</option>
                     <option id="bare">Bare</option>
                 </select>
-                <p title="Wisp is more stable and less likely to be blocked, but Bare is a bit faster" style="display: inline;">?</p>
+                <p title="Wisp is more stable and less likely to be blocked, but Bare is a bit faster"
+                   style="font-size: 20px; display: inline; user-select: none;">
+                   (?)
+                </p>
             </div>
-            <input id="serverAddress" type="text"/>
-            <input id="targetAddress" type="text" value="https://google.com"/>
-            <button id="startButton">Start</button>
+            <input id="serverAddress" type="text" class="button"/>
+            <input id="targetAddress" type="text" class="button" value="https://google.com"/>
+            <button id="startButton" class="button">Start</button>
         </div>
-        <iframe id="proxyIframe" style="display: none;"/>
+        <iframe id="proxyIframe" class="fillScreen" style="display: none; background-color: whitesmoke;"/>
     </body>
 </html>

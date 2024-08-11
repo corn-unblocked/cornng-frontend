@@ -25,9 +25,7 @@ async function registerSW() {
 
 const connection = new BareMux.BareMuxConnection("/baremux/worker.js")
 
-startButton.addEventListener("click", async (event) => {
-    event.preventDefault();
-
+async function startProxy() {
     try {
         await registerSW();
     } catch (err) {
@@ -49,4 +47,17 @@ startButton.addEventListener("click", async (event) => {
         await connection.setTransport("/libcurl/index.mjs", [{wisp: wispUrl.href}]);
     }
     frame.src = __uv$config.prefix + __uv$config.encodeUrl(url);
+}
+
+startButton.addEventListener("click", async (event) => {
+    event.preventDefault();
+
+    await startProxy();
+});
+
+targetAddress.addEventListener("keypress", async (event) => {
+    if (event.key !== "Enter") return;
+    event.preventDefault();
+
+    await startProxy();
 });
