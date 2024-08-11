@@ -44,7 +44,8 @@ async function startProxy() {
         wispUrl.protocol = wispUrl.protocol === "http:" ? "ws:" : "wss:";
         await connection.setTransport("/libcurl/index.mjs", [{wisp: wispUrl.href}]);
     }
-    window.open(__uv$config.prefix + __uv$config.encodeUrl(url), "_self");
+    window.localStorage.setItem("serverAddress", serverAddress.value);
+    let w = window.open(window.location.origin + __uv$config.prefix + __uv$config.encodeUrl(url), "_self");
 }
 
 startButton.addEventListener("click", async (event) => {
