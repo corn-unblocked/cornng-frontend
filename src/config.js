@@ -16,7 +16,7 @@ const config = {
     wispProxyIndex: 1,
     wispCustomProxy: "",
     bareProxyIndex: 1,
-    bareCustomProxy: ""
+    bareCustomProxy: "",
 }
 
 function loadConfig() {

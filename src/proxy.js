@@ -35,6 +35,8 @@ async function startProxy() {
 
     const url = targetAddress.value;
 
+    let frame = document.getElementById("proxyIframe");
+    frame.style.display = "block";
     if (config.useBare && await connection.getTransport() !== "/baremod/index.mjs") {
         let bareUrl = new URL(serverAddress.value);
         await connection.setTransport("/baremod/index.mjs", [bareUrl.href]);
@@ -44,7 +46,7 @@ async function startProxy() {
         wispUrl.protocol = wispUrl.protocol === "http:" ? "ws:" : "wss:";
         await connection.setTransport("/libcurl/index.mjs", [{wisp: wispUrl.href}]);
     }
-    window.open(__uv$config.prefix + __uv$config.encodeUrl(url), "_self");
+    frame.src = __uv$config.prefix + __uv$config.encodeUrl(url);
 }
 
 startButton.addEventListener("click", async (event) => {
