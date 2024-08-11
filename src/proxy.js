@@ -35,14 +35,21 @@ async function startProxy() {
 
     const url = targetAddress.value;
 
-    if (config.useBare && await connection.getTransport() !== "/baremod/index.mjs") {
+    let frame = document.getElementById("proxyIframe");
+    frame.style.display = "block";
+    if (currentProxyConfig.proxyType === 2 && await connection.getTransport() !== "/baremod/index.mjs") {
         let bareUrl = new URL(serverAddress.value);
         await connection.setTransport("/baremod/index.mjs", [bareUrl.href]);
-    } else if (await connection.getTransport() !== "/libcurl/index.mjs") {
+    } else if (currentProxyConfig.proxyType === 1 && await connection.getTransport() !== "/libcurl/index.mjs") {
         let wispUrl = new URL(serverAddress.value);
         // set to websocket protocol
         wispUrl.protocol = wispUrl.protocol === "http:" ? "ws:" : "wss:";
         await connection.setTransport("/libcurl/index.mjs", [{wisp: wispUrl.href}]);
+    } else if (await connection.getTransport() !== "/epoxy/index.mjs") {
+        let wispUrl = new URL(serverAddress.value);
+        // set to websocket protocol
+        wispUrl.protocol = wispUrl.protocol === "http:" ? "ws:" : "wss:";
+        await connection.setTransport("/epoxy/index.mjs", [{wisp: wispUrl.href}]);
     }
     window.localStorage.setItem("serverAddress", serverAddress.value);
     let w = window.open(window.location.origin + __uv$config.prefix + __uv$config.encodeUrl(url), "_self");

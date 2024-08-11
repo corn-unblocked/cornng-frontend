@@ -39,7 +39,11 @@ http
     const file = await prepareFile(req.url);
     const statusCode = file.found ? 200 : 404;
     const mimeType = MIME_TYPES[file.ext] || MIME_TYPES.default;
-    res.writeHead(statusCode, { "Content-Type": mimeType });
+    res.writeHead(statusCode, {
+      "Content-Type": mimeType,
+      "Cross-Origin-Opener-Policy": "same-origin",
+      "Cross-Origin-Embedder-Policy": "require-corp"
+    });
     file.stream.pipe(res);
     console.log(`${req.method} ${req.url} ${statusCode}`);
   })
