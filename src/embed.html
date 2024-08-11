@@ -9,7 +9,8 @@
                 let a = window.location.href;
                 iframe.src = a.substring(0, a.lastIndexOf("/"));
                 iframe.style = "border: none; position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;";
-                iframe.allow = "fullscreen encrypted-media autoplay usb web-share geolocation camera microphone display-capture screen-wake-lock";
+                iframe.allow = "fullscreen encrypted-media autoplay usb web-share geolocation camera microphone display-capture screen-wake-lock "
+                               + "storage-access publickey-credentials-create publickey-credentials-get picture-in-picture otp-credentials";
                 iframe.sandbox = "allow-popups allow-popups-to-escape-sandbox allow-downloads allow-forms allow-modals allow-orientation-lock "
                                  + "allow-pointer-lock allow-presentation allow-same-origin allow-scripts allow-storage-access-by-user-activation";
                 newWindow.document.body.appendChild(iframe);
