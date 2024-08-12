@@ -1,5 +1,3 @@
-const stockSW = "/uv/sw.js";
-
 /**
  * List of hostnames that are allowed to run serviceworkers on http://
  */
@@ -20,10 +18,10 @@ async function registerSW() {
         throw new Error("Your browser doesn't support service workers.");
     }
 
-    await navigator.serviceWorker.register(stockSW);
+    await navigator.serviceWorker.register(__uv$config.stockSW);
 }
 
-const connection = new BareMux.BareMuxConnection("/baremux/worker.js")
+const connection = new BareMux.BareMuxConnection(__uv$config.loc + "/baremux/worker.js")
 
 async function startProxy() {
     try {
@@ -37,14 +35,14 @@ async function startProxy() {
 
     let frame = document.getElementById("proxyIframe");
     frame.style.display = "block";
-    if (config.useBare && await connection.getTransport() !== "/baremod/index.mjs") {
+    if (config.useBare && await connection.getTransport() !== __uv$config.loc + "/baremod/index.mjs") {
         let bareUrl = new URL(serverAddress.value);
-        await connection.setTransport("/baremod/index.mjs", [bareUrl.href]);
-    } else if (await connection.getTransport() !== "/libcurl/index.mjs") {
+        await connection.setTransport(__uv$config.loc + "/baremod/index.mjs", [bareUrl.href]);
+    } else if (await connection.getTransport() !== __uv$config.loc + "/libcurl/index.mjs") {
         let wispUrl = new URL(serverAddress.value);
         // set to websocket protocol
         wispUrl.protocol = wispUrl.protocol === "http:" ? "ws:" : "wss:";
-        await connection.setTransport("/libcurl/index.mjs", [{wisp: wispUrl.href}]);
+        await connection.setTransport(__uv$config.loc + "/libcurl/index.mjs", [{wisp: wispUrl.href}]);
     }
     frame.src = __uv$config.prefix + __uv$config.encodeUrl(url);
 }

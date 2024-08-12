@@ -74,3 +74,5 @@ serverAddress.addEventListener("change", updateCustomProxy);
 
 proxyTypeSelector.selectedIndex = config.useBare ? 1 : 0;
 updateProxyType();
+
+targetAddress.value = new URLSearchParams(document.location.search).get("url") ?? "https://google.com";

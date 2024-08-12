@@ -1,10 +1,19 @@
-self.__uv$config = {
-    prefix: "/uv/service/",
-    encodeUrl: Ultraviolet.codec.xor.encode,
-    decodeUrl: Ultraviolet.codec.xor.decode,
-    handler: "/uv/uv.handler.js",
-    client: "/uv/uv.client.js",
-    bundle: "/uv/uv.bundle.js",
-    config: "/uv/uv.config.js",
-    sw: "/uv/uv.sw.js",
-};
+function initUvConfig() {
+    let path = window.location.pathname;
+    let loc = path.substring(0, path.lastIndexOf("/"));
+
+    self.__uv$config = {
+        prefix: loc + "/uv/service/",
+        encodeUrl: Ultraviolet.codec.xor.encode,
+        decodeUrl: Ultraviolet.codec.xor.decode,
+        handler: loc + "/uv/uv.handler.js",
+        client: loc + "/uv/uv.client.js",
+        bundle: loc + "/uv/uv.bundle.js",
+        config: loc + "/uv/uv.config.js",
+        sw: loc + "/uv/uv.sw.js",
+        stockSW: loc + "/uv/sw.js",
+        loc: loc,
+    };
+}
+
+initUvConfig();
