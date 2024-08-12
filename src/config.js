@@ -2,12 +2,14 @@ const wispProxyUrls = {
     "custom": "Custom",
     "wss://aluu.xyz/wisp/": "Alu",
     "wss://incog.works/wisp/": "Incognito",
+    "wss://definitelyscience.com/wisp/": "Definitely Science",
     "wss://wisp.mercurywork.shop/": "Mercury",
 }
 
 const bareProxyUrls = {
     "custom": "Custom",
     "https://aluu.xyz/bare/": "Alu",
+    "https://definitelyscience.com/bare/": "Definitely Science",
     "https://incog.works/bare/": "Incognito",
 }
 
