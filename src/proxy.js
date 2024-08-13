@@ -32,17 +32,18 @@ async function startProxy() {
     }
 
     const url = targetAddress.value;
+    const loc = __uv$config.loc;
 
     let frame = document.getElementById("proxyIframe");
     frame.style.display = "block";
-    if (config.useBare) {
+    if (config.useBare && await connection.getTransport() != loc + "/baremod/index.mjs") {
         let bareUrl = new URL(serverAddress.value);
-        await connection.setTransport(__uv$config.loc + "/baremod/index.mjs", [bareUrl.href]);
-    } else {
+        await connection.setTransport(loc + "/baremod/index.mjs", [bareUrl.href]);
+    } else if (await connection.getTransport() != loc + "/libcurl/index.mjs") {
         let wispUrl = new URL(serverAddress.value);
         // set to websocket protocol
         wispUrl.protocol = wispUrl.protocol === "http:" ? "ws:" : "wss:";
-        await connection.setTransport(__uv$config.loc + "/libcurl/index.mjs", [{wisp: wispUrl.href}]);
+        await connection.setTransport(loc + "/libcurl/index.mjs", [{wisp: wispUrl.href}]);
     }
     frame.src = __uv$config.prefix + __uv$config.encodeUrl(url);
 }

@@ -1,27 +1,16 @@
-function initUvConfig() {
-    let loc;
-    // script needs to run both in sw and normal js
-    try {
-        let path = window.location.pathname;
-        loc = path.substring(0, path.lastIndexOf("/"));
-    } catch (_) {
-        let path = self.location.pathname;
-        // this also includes /uv/ ending so cut that off as well
-        loc = path.substring(0, path.lastIndexOf("/", path.lastIndexOf("/")-1));
-    }
+let __cornng$loc = self.location.pathname.includes("/uv/")
+    ? self.location.pathname.substring(0, self.location.pathname.indexOf("/uv/")-1)
+    : self.location.pathname.substring(0, self.location.pathname.lastIndexOf("/"));
 
-    self.__uv$config = {
-        prefix: loc + "/uv/service/",
-        encodeUrl: Ultraviolet.codec.xor.encode,
-        decodeUrl: Ultraviolet.codec.xor.decode,
-        handler: loc + "/uv/uv.handler.js",
-        client: loc + "/uv/uv.client.js",
-        bundle: loc + "/uv/uv.bundle.js",
-        config: loc + "/uv/uv.config.js",
-        sw: loc + "/uv/uv.sw.js",
-        stockSW: loc + "/uv/sw.js",
-        loc: loc,
-    };
-}
-
-initUvConfig();
+self.__uv$config = {
+    prefix: __cornng$loc + "/uv/service/",
+    encodeUrl: Ultraviolet.codec.xor.encode,
+    decodeUrl: Ultraviolet.codec.xor.decode,
+    handler: __cornng$loc + "/uv/uv.handler.js",
+    client: __cornng$loc + "/uv/uv.client.js",
+    bundle: __cornng$loc + "/uv/uv.bundle.js",
+    config: __cornng$loc + "/uv/uv.config.js",
+    sw: __cornng$loc + "/uv/uv.sw.js",
+    stockSW: __cornng$loc + "/uv/sw.js",
+    loc: __cornng$loc,
+};
