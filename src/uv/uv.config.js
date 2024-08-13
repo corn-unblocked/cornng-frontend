@@ -1,5 +1,10 @@
 function initUvConfig() {
-    let path = window.location.pathname;
+    let path = location.pathname;
+    try {
+        path = window.location.pathname;
+    } catch (_) {
+        path = self.location.pathname;
+    }
     let loc = path.substring(0, path.lastIndexOf("/"));
 
     self.__uv$config = {
