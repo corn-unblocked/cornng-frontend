@@ -11,6 +11,7 @@ const bareProxyUrls = {
     "https://aluu.xyz/bare/": "Alu",
     "https://definitelyscience.com/bare/": "Definitely Science",
     "https://incog.works/bare/": "Incognito",
+    "https://kazwire.com/bare/": "Kazwire",
 }
 
 const config = {

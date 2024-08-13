@@ -35,10 +35,10 @@ async function startProxy() {
 
     let frame = document.getElementById("proxyIframe");
     frame.style.display = "block";
-    if (config.useBare && await connection.getTransport() !== __uv$config.loc + "/baremod/index.mjs") {
+    if (config.useBare) {
         let bareUrl = new URL(serverAddress.value);
         await connection.setTransport(__uv$config.loc + "/baremod/index.mjs", [bareUrl.href]);
-    } else if (await connection.getTransport() !== __uv$config.loc + "/libcurl/index.mjs") {
+    } else {
         let wispUrl = new URL(serverAddress.value);
         // set to websocket protocol
         wispUrl.protocol = wispUrl.protocol === "http:" ? "ws:" : "wss:";
