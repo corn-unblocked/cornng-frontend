@@ -7,7 +7,7 @@ function initUvConfig() {
     } catch (_) {
         let path = self.location.pathname;
         // this also includes /uv/ ending so cut that off as well
-        loc = path.substring(0, path.lastIndexOf("/", path.lastIndexOf("/")-1)));
+        loc = path.substring(0, path.lastIndexOf("/", path.lastIndexOf("/")-1));
     }
 
     self.__uv$config = {
