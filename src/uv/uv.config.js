@@ -1,11 +1,13 @@
 function initUvConfig() {
-    let path;
+    let loc;
+    // script needs to run both in sw and normal js
     try {
-        path = window.location.pathname + "/uv";
+        let path = window.location.pathname;
+        loc = path.substring(0, path.lastIndexOf("/")) + "/uv";
     } catch (_) {
-        path = self.location.pathname;
+        let path = self.location.pathname;
+        loc = path.substring(0, path.lastIndexOf("/"));
     }
-    let loc = path.substring(0, path.lastIndexOf("/"));
 
     self.__uv$config = {
         prefix: loc + "/service/",
