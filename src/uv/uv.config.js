@@ -1,5 +1,5 @@
 let __cornng$loc = self.location.pathname.includes("/uv/")
-    ? self.location.pathname.substring(0, self.location.pathname.indexOf("/uv/")-1)
+    ? self.location.pathname.substring(0, self.location.pathname.indexOf("/uv/"))
     : self.location.pathname.substring(0, self.location.pathname.lastIndexOf("/"));
 
 self.__uv$config = {
