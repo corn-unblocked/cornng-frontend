@@ -12,6 +12,7 @@
         <script src="uv/uv.config.js" defer></script>
         <script src="proxy.js" defer></script>
         <script src="index.js" defer></script>
+        <script src="navbar.js" defer></script>
     </head>
     <body>
         <div class="vbox fillScreen" style="margin: auto">
@@ -22,12 +23,14 @@
                     <option id="wisp">Wisp/Libcurl</option>
                     <option id="bare">Bare</option>
                 </select>
-                <p
+                <button
+                    class="button square"
                     title="Wisp is more stable and less likely to be blocked, but Bare is a bit faster"
-                    style="font-size: 20px; display: inline; user-select: none"
+                    style="font-size: 20px; background-color: gainsboro"
+                    disabled=true
                 >
-                    (?)
-                </p>
+                    ?⃝
+                </>
             </div>
             <input id="serverAddress" type="text" class="button" />
             <input
@@ -43,6 +46,61 @@
             class="fillScreen"
             style="display: none; background-color: whitesmoke"
             allow="fullscreen encrypted-media autoplay usb web-share geolocation camera microphone display-capture screen-wake-lock storage-access publickey-credentials-create publickey-credentials-get picture-in-picture otp-credentials"
-        />
+        ></iframe>
+        <div class="hbox" id="navbar" style="display: none">
+            <div>
+                <button
+                    class="button square"
+                    style="padding: 0px 13px"
+                    title="Back"
+                    id="backProxy"
+                >
+                    ￩
+                </button>
+                <button
+                    class="button square"
+                    style="padding: 0px 13px"
+                    title="Forward"
+                    id="forwardProxy"
+                >
+                    ￫
+                </button>
+                <button
+                    class="button square"
+                    style="padding: 0px 0px"
+                    title="Reload"
+                    id="reloadProxy"
+                >
+                    ⟳
+                </button>
+            </div>
+            <input type="text" class="button" style="flex: 1" id="urlBar" />
+            <div>
+                <button
+                    class="button square"
+                    style="padding: 0px 10px"
+                    title="Return to proxy select"
+                    id="exitProxy"
+                >
+                    ×
+                </button>
+                <button
+                    class="button square"
+                    style="padding: 0px 13px"
+                    title="Close navbar"
+                    id="closeNavbar"
+                >
+                    ↑
+                </button>
+            </div>
+        </div>
+        <button
+            class="button square"
+            style="position: fixed; top: 0px; right: 1vw; margin: 0px; display: none; z-index: 1"
+            title="Open navbar"
+            id="openNavbar"
+        >
+                ↓
+        </button>
     </body>
 </html>

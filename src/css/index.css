@@ -25,13 +25,22 @@ div.hbox {
     column-gap: 10px;
 }
 
+div#navbar {
+    position: fixed;
+    right: 1vw;
+    top: 1vh;
+    width: 98vw;
+    z-index: 1;
+}
+
 .fillScreen {
     border: none;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
+    z-index: 0;
 }
 
 .button {
@@ -48,11 +57,20 @@ div.hbox {
     font-size: 16px;
 }
 
+.square.button {
+    width: 42px;
+    aspect-ratio: 1/1;
+    padding: 0px;
+    font-size: 32px;
+    line-height: 0px;
+}
+
 input.button {
     width: 500px;
 }
 
-.button:hover, .button:active {
+.button:hover,
+.button:active {
     background-color: #eff21b;
 }
 
