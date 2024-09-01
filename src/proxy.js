@@ -22,7 +22,6 @@ async function registerSW() {
         throw new Error("Your browser doesn't support service workers.");
     }
 
-    console.log("registering sw");
     swRegistered = true;
     await navigator.serviceWorker.register(__uv$config.stockSW);
 }
