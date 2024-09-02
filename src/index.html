@@ -18,28 +18,36 @@
         <div class="vbox fillScreen" style="margin: auto">
             <img class="banner" src="img/corn.svg" />
             <div class="hbox">
-                <select id="proxyUrl" class="button"></select>
-                <select id="proxyType" class="button">
+                <select id="proxyUrl" class="button" title="Proxy URL"></select>
+                <select id="proxyType" class="button" title="Proxy type">
                     <option id="wisp">Wisp/Libcurl</option>
                     <option id="bare">Bare</option>
                 </select>
                 <button
                     class="button square"
-                    title="Wisp is more stable and less likely to be blocked, but Bare is a bit faster"
-                    style="font-size: 20px; background-color: gainsboro"
-                    disabled=true
+                    title="Usage help"
+                    style="font-size: 20px"
+                    onclick="window.open('https://sites.google.com/view/cornunblocked/help/usage')"
                 >
                     ?⃝
-                </>
+                </button>
             </div>
-            <input id="serverAddress" type="text" class="button" />
+            <input
+                id="serverAddress"
+                type="text"
+                class="button"
+                title="Custom proxy URL"
+            />
             <input
                 id="targetAddress"
                 type="text"
                 class="button"
                 value="https://google.com"
+                title="Destination URL"
             />
-            <button id="startButton" class="button">Start</button>
+            <button id="startButton" class="button" title="Start proxy">
+                Start
+            </button>
         </div>
         <iframe
             id="proxyIframe"
@@ -96,11 +104,18 @@
         </div>
         <button
             class="button square"
-            style="position: fixed; top: 0px; right: 1vw; margin: 0px; display: none; z-index: 1"
+            style="
+                position: fixed;
+                top: 0px;
+                right: 1vw;
+                margin: 0px;
+                display: none;
+                z-index: 1;
+            "
             title="Open navbar"
             id="openNavbar"
         >
-                ↓
+            ↓
         </button>
     </body>
 </html>
