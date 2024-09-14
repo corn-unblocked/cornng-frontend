@@ -35,12 +35,36 @@ const urlBar = document.getElementById("urlBar");
  */
 const proxyIframe = document.getElementById("proxyIframe");
 
-backButton.addEventListener("click", () =>
-    proxyIframe.contentWindow.history.back(),
-);
-forwardButton.addEventListener("click", () =>
-    proxyIframe.contentWindow.history.forward(),
-);
+// cant use iframe history because it degrades two iframes deep
+const proxyHistory = {
+    urls: [],
+    index: 0,
+    back: function () {
+        this.index -= 1;
+        return this.urls[this.index];
+    },
+    forward: function () {
+        if (this.index < this.urls.length - 1) this.index += 1;
+        return this.urls[this.index];
+    },
+    add: function (url) {
+        // prevent readding duplicate urls when reloading page
+        if (url == this.urls[this.index]) return;
+        // delete "future" history if index is set to past
+        if (this.index < this.urls.length - 1) {
+            this.urls.splice(this.index + 1);
+        }
+        this.urls.push(url);
+        this.index += 1;
+    },
+};
+
+backButton.addEventListener("click", () => {
+    proxyIframe.src = encodeUrl(proxyHistory.back());
+});
+forwardButton.addEventListener("click", () => {
+    proxyIframe.src = encodeUrl(proxyHistory.forward());
+});
 
 reloadButton.addEventListener("click", () =>
     proxyIframe.contentWindow.location.reload(),
@@ -49,7 +73,6 @@ reloadButton.addEventListener("click", () =>
 openNavbar.addEventListener("click", () => {
     navbar.style.display = "flex";
     openNavbar.style.display = "none";
-    iframeUrlUpdate();
 });
 
 closeNavbar.addEventListener("click", () => {
@@ -57,23 +80,32 @@ closeNavbar.addEventListener("click", () => {
     openNavbar.style.display = "block";
 });
 
-function iframeUrlUpdate() {
-    let url = proxyIframe.contentWindow.location.pathname;
+function decodeUrl(url) {
     let config = __uv$config;
     url = url.slice(config.prefix.length);
-    urlBar.value = config.decodeUrl(url);
+    return config.decodeUrl(url);
 }
 
-proxyIframe.addEventListener("load", iframeUrlUpdate);
+function encodeUrl(url) {
+    let config = __uv$config;
+    // if period, assume valid url. should work 90% of the time
+    if (!url.includes(".")) {
+        url = "https://google.com/search?q=" + url;
+    } else if (!url.startsWith("https://") && !url.startsWith("http://")) {
+        url = "https://" + url;
+    }
+    return config.prefix + config.encodeUrl(url);
+}
+
+proxyIframe.addEventListener("load", () => {
+    let url = decodeUrl(proxyIframe.contentWindow.location.pathname);
+    urlBar.value = url;
+    proxyHistory.add(url);
+});
 
 urlBar.addEventListener("keypress", (event) => {
     if (event.key !== "Enter") return;
-    let config = __uv$config;
-    let url = urlBar.value;
-    if (!url.startsWith("https://") && !url.startsWith("http://")) {
-        url = "https://" + url;
-    }
-    proxyIframe.src = config.prefix + config.encodeUrl(url);
+    proxyIframe.src = encodeUrl(urlBar.value);
 });
 
 exitProxy.addEventListener("click", () => {

@@ -56,10 +56,7 @@ async function startProxy() {
             { wisp: wispUrl.href },
         ]);
     }
-    if (!url.startsWith("https://") && !url.startsWith("http://")) {
-        url = "https://" + url;
-    }
-    frame.src = __uv$config.prefix + __uv$config.encodeUrl(url);
+    frame.src = encodeUrl(url);
     document.getElementById("openNavbar").style.display = "block";
 }
 
