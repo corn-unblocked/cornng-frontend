@@ -44,12 +44,12 @@ async function startProxy() {
     let frame = document.getElementById("proxyIframe");
     frame.style.display = "block";
     if (config.useBare) {
-        let bareUrl = new URL(serverAddress.value);
+        let bareUrl = new URL(proxyUrl);
         await connection.setTransport(loc + "/baremod/index.mjs", [
             bareUrl.href,
         ]);
     } else {
-        let wispUrl = new URL(serverAddress.value);
+        let wispUrl = new URL(proxyUrl);
         // set to websocket protocol
         wispUrl.protocol = wispUrl.protocol === "http:" ? "ws:" : "wss:";
         await connection.setTransport(loc + "/libcurl/index.mjs", [
