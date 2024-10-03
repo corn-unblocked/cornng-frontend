@@ -42,21 +42,23 @@ const config = {
     bareCustomProxy: "",
 };
 
+function saveConfig() {
+    localStorage.setItem("config", JSON.stringify(config));
+}
+
 function loadConfig() {
     let tmp = JSON.parse(localStorage.getItem("config"));
+    // overwrite old configs
     if (
-        tmp.configVersion === "undefined" ||
+        tmp.configVersion == undefined ||
         tmp.configVersion < config.configVersion
     ) {
+        saveConfig();
         return;
     }
     for (let a in tmp) {
         config[a] = tmp[a];
     }
-}
-
-function saveConfig() {
-    localStorage.setItem("config", JSON.stringify(config));
 }
 
 loadConfig();
