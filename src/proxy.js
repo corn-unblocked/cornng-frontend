@@ -35,7 +35,14 @@ async function startProxy() {
         await registerSW();
     } catch (err) {
         // TODO - error handling that exists
-        throw err;
+        return;
+    }
+
+    let proxyUrlObj;
+    try {
+        proxyUrlObj = new Url(proxyUrl);
+    } catch (err) {
+        return;
     }
 
     let url = targetAddress.value;
@@ -44,16 +51,14 @@ async function startProxy() {
     let frame = document.getElementById("proxyIframe");
     frame.style.display = "block";
     if (config.useBare) {
-        let bareUrl = new URL(proxyUrl);
         await connection.setTransport(loc + "/baremod/index.mjs", [
-            bareUrl.href,
+            proxyUrlObj.href,
         ]);
     } else {
-        let wispUrl = new URL(proxyUrl);
         // set to websocket protocol
-        wispUrl.protocol = wispUrl.protocol === "http:" ? "ws:" : "wss:";
+        proxyUrlObj.protocol = proxyUrlObj.protocol === "http:" ? "ws:" : "wss:";
         await connection.setTransport(loc + "/libcurl/index.mjs", [
-            { wisp: wispUrl.href },
+            { wisp: proxyUrlObj.href },
         ]);
     }
     frame.src = encodeUrl(url);
