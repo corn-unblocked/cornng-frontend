@@ -76,10 +76,18 @@ async function autoDetectServerWisp() {
                 const socket = new WebSocket(url);
                 // wait 5s before failing to find url, may add in config later
                 setTimeout(() => {
-                    if (socket.readyState == WebSocket.OPEN) res(url);
-                    else rej("Failed to open websocket on " + url);
+                    if (socket.readyState == WebSocket.OPEN) {
+                        socket.close();
+                        res(url);
+                    } else {
+                        socket.close();
+                        rej("Failed to open websocket on " + url);
+                    }
                 }, 5000);
-                socket.onopen = () => res(url);
+                socket.onopen = () => { 
+                    socket.close();
+                    res(url);
+                };
             }),
         );
     }
@@ -96,8 +104,10 @@ function updateServerAddress() {
             : config.wispCustomProxy;
         serverAddress.disabled = false;
     } else if (proxyUrlSelector.value === "auto") {
+        serverAddress.disabled = true;
+        serverAddress.value = "";
+        proxyUrl = "";
         autoDetectServer().then(() => {
-            serverAddress.disabled = true;
             serverAddress.value = proxyUrl;
         });
     } else {
