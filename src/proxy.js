@@ -40,7 +40,7 @@ async function startProxy() {
 
     let proxyUrlObj;
     try {
-        proxyUrlObj = new Url(proxyUrl);
+        proxyUrlObj = new URL(proxyUrl);
     } catch (err) {
         return;
     }
