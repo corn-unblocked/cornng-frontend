@@ -52,7 +52,6 @@
             id="proxyIframe"
             class="fillScreen"
             style="display: none; background-color: whitesmoke"
-            allow="fullscreen encrypted-media autoplay usb web-share geolocation camera microphone display-capture screen-wake-lock storage-access publickey-credentials-create publickey-credentials-get picture-in-picture otp-credentials"
         ></iframe>
         <div class="hbox" id="navbar" style="display: none">
             <div>
@@ -97,7 +96,14 @@
             title="Open navbar"
             id="openNavbar"
         >
-            ↓
         </button>
+        <script>
+            // move this down here for readability
+            document.getElementById("proxyIframe").allow = "accelerometer ambient-light-sensor attribution-reporting autoplay bluetooth browsing-topics camera compute-pressure " +
+                "cross-origin-isolated display-capture document-domain encrypted-media fullscreen gamepad geolocation gyroscope hid " +
+                "identity-credentials-get idle-detection local-fonts magnetometer microphone midi otp-credentials payment " +
+                "picture-in-picture publickey-credentials-create publickey-credentials-get screen-wake-lock serial speaker-selection " +
+                "storage-access usb web-share window-management xr-spatial-tracking";
+        </script>
     </body>
 </html>
