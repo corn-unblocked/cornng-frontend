@@ -1,0 +1,6 @@
+[submodule "submodule/ultraviolet"]
+	path = submodule/ultraviolet
+	url = https://github.com/titaniumnetwork-dev/Ultraviolet
+[submodule "submodule/curltransport"]
+	path = submodule/curltransport
+	url = https://github.com/MercuryWorkshop/CurlTransport

@@ -1,18 +1,18 @@
 {
-    "name": "cornng-frontend",
-    "version": "0.1.0",
-    "type": "module",
-    "scripts": {
-        "build": "node build.js",
-        "start": "node app.js"
-    },
-    "dependencies": {
-        "@mercuryworkshop/bare-as-module3": "^2.2.2",
-        "@mercuryworkshop/bare-mux": "^2.0.9",
-        "@mercuryworkshop/libcurl-transport": "git+https://github.com/MercuryWorkshop/CurlTransport#master",
-        "@titaniumnetwork-dev/ultraviolet": "git+https://github.com/titaniumnetwork-dev/Ultraviolet#main"
-    },
-    "devDependencies": {
-        "shelljs": "0.8.5"
-    }
+  "name": "cornng-frontend",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build": "node build.js",
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "@mercuryworkshop/bare-as-module3": "^2.2.2",
+    "@mercuryworkshop/bare-mux": "^2.0.9",
+    "@titaniumnetwork-dev/ultraviolet": "file:submodule/ultraviolet",
+    "@mercuryworkshop/libcurl-transport": "file:submodule/curltransport"
+  },
+  "devDependencies": {
+    "shelljs": "0.8.5"
+  }
 }
