@@ -15,7 +15,8 @@ shell.echo(
   "Building CornNG Frontend with build options " + JSON.stringify(buildOptions),
 );
 
-shell.exec("git submodule update");
+// should work in ci
+shell.exec("git submodule update --remote --init");
 
 for (let m of [
   "@mercuryworkshop/libcurl-transport",
