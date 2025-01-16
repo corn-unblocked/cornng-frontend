@@ -29,7 +29,7 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3.2.1-node20
+      uses: actions/upload-artifact@v4
       with:
         # Artifact name
         name: artifact
