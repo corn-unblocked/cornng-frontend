@@ -2,14 +2,12 @@
  * List of hostnames that are allowed to run serviceworkers on http://
  */
 const swAllowedHostnames = ["localhost", "127.0.0.1"];
-let swRegistered = false;
 
 /**
  * Global util
  * Used in 404.html and index.html
  */
 async function registerSW() {
-    if (swRegistered) return;
     if (!navigator.serviceWorker) {
         if (
             location.protocol !== "https:" &&
@@ -21,8 +19,13 @@ async function registerSW() {
 
         throw new Error("Your browser doesn't support service workers.");
     }
-
-    swRegistered = true;
+    // unregister all previous workers when reregistering
+    navigator.serviceWorker.getRegistrations()
+        .then(function(registrations) {
+            for(let registration of registrations) {
+               registration.unregister();
+            }
+        });
     await navigator.serviceWorker.register(__uv$config.stockSW);
 }
 
