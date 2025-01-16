@@ -2,6 +2,7 @@
  * List of hostnames that are allowed to run serviceworkers on http://
  */
 const swAllowedHostnames = ["localhost", "127.0.0.1"];
+let connection;
 
 /**
  * Global util
@@ -23,15 +24,12 @@ async function registerSW() {
     navigator.serviceWorker.getRegistrations()
         .then(function(registrations) {
             for(let registration of registrations) {
-               registration.unregister();
+                registration.unregister();
             }
         });
     await navigator.serviceWorker.register(__uv$config.stockSW);
+    connection = new BareMux.BareMuxConnection(__uv$config.loc + "/baremux/worker.js");
 }
-
-const connection = new BareMux.BareMuxConnection(
-    __uv$config.loc + "/baremux/worker.js",
-);
 
 async function startProxy() {
     try {
