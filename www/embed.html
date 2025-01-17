@@ -2,6 +2,7 @@
 <html>
     <head>
         <link rel="stylesheet" href="css/index.css" />
+        <script src="iframesettings.js"></script>
         <script>
             function inject() {
                 let newWindow = window.open();
@@ -11,15 +12,8 @@
                 iframe.style =
                     "border: none; position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;";
                 // allow everything (https://developer.mozilla.org/en-US/docs/Web/HTTP/Permissions_Policy#browser_compatibility)
-                iframe.allow =
-                    "accelerometer ambient-light-sensor attribution-reporting autoplay bluetooth browsing-topics camera compute-pressure " +
-                    "cross-origin-isolated display-capture document-domain encrypted-media fullscreen gamepad geolocation gyroscope hid " +
-                    "identity-credentials-get idle-detection local-fonts magnetometer microphone midi otp-credentials payment " +
-                    "picture-in-picture publickey-credentials-create publickey-credentials-get screen-wake-lock serial speaker-selection " +
-                    "storage-access usb web-share window-management xr-spatial-tracking";
-                iframe.sandbox =
-                    "allow-popups allow-popups-to-escape-sandbox allow-downloads allow-forms allow-modals allow-orientation-lock " +
-                    "allow-pointer-lock allow-presentation allow-same-origin allow-scripts allow-storage-access-by-user-activation";
+                iframe.allow = iframeAllow;
+                iframe.sandbox = iframeSandbox;
                 newWindow.document.body.appendChild(iframe);
             }
         </script>

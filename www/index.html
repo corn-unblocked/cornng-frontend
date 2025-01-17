@@ -4,15 +4,12 @@
         <title>CornNG Pr0xy</title>
         <link rel="icon" type="image/png" href="img/cornicon.png" />
         <link rel="stylesheet" href="css/index.css" />
-        <script src="config.js"></script>
+        <script src="iframesettings.js"></script>
         <script src="baremux/index.js" defer></script>
         <script src="baremod/index.js" defer></script>
         <script src="libcurl/index.js" defer></script>
         <script src="uv/uv.bundle.js" defer></script>
         <script src="uv/uv.config.js" defer></script>
-        <script src="proxy.js" defer></script>
-        <script src="index.js" defer></script>
-        <script src="navbar.js" defer></script>
     </head>
     <body>
         <div class="vbox fillScreen" style="margin: auto">
@@ -98,13 +95,13 @@
         >
             ↓
         </button>
-        <script>
-            // move this down here for readability
-            document.getElementById("proxyIframe").allow = "accelerometer ambient-light-sensor attribution-reporting autoplay bluetooth browsing-topics camera compute-pressure " +
-                "cross-origin-isolated display-capture document-domain encrypted-media fullscreen gamepad geolocation gyroscope hid " +
-                "identity-credentials-get idle-detection local-fonts magnetometer microphone midi otp-credentials payment " +
-                "picture-in-picture publickey-credentials-create publickey-credentials-get screen-wake-lock serial speaker-selection " +
-                "storage-access usb web-share window-management xr-spatial-tracking";
+        <script defer type="module">
+            import * as Manager from "./manager.js";
+            import * as Index from "./index.js";
+            let iframe = document.getElementById("proxyIframe");
+            iframe.allow = iframeAllow;
+            let manager = new Manager.Manager(__uv$config);
+            let index = new Index.IndexPage(manager);
         </script>
     </body>
 </html>
