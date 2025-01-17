@@ -1,4 +1,5 @@
 import shell from "shelljs";
+import * as esbuild from "esbuild";
 
 let buildOptions = {
     targetPath: "public",
@@ -33,5 +34,18 @@ shell.cp(
     buildOptions.targetPath + "/uv",
 );
 
-shell.cp("-rf", "src/*", buildOptions.targetPath);
+shell.cp("-rf", "www/*", buildOptions.targetPath);
 shell.cp("LICENSE", buildOptions.targetPath);
+
+await esbuild.build({
+    entryPoints: ["src/index.ts"],
+    bundle: true,
+    outfile: buildOptions.targetPath + "/index.js",
+    format: "esm"
+});
+await esbuild.build({
+    entryPoints: ["src/manager.ts"],
+    bundle: true,
+    outfile: buildOptions.targetPath + "/manager.js",
+    format: "esm"
+});
