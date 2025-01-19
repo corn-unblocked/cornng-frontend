@@ -90,19 +90,7 @@ export class ProxyManager {
     }
 
     public async startProxy(url: string) {
-        try {
-            await this.registerSW();
-        } catch (err) {
-            // TODO - error handling that exists
-            return;
-        }
-
-        try {
-            new URL(this.proxyUrl);
-        } catch (err) {
-            return;
-        }
-
+        await this.registerSW();
         const loc = this.uvConfig.loc;
         if (this.config.useBare) {
             await this.connection.setTransport(loc + "/baremod/index.mjs", [

@@ -62,7 +62,11 @@ export class IndexPage {
         this.startButton.addEventListener(
             "click",
             (async (event) => {
-                await this.proxy.startProxy(this.targetAddress.value);
+                try {
+                    await this.proxy.startProxy(this.targetAddress.value);
+                } catch (_e) {
+                    return;
+                }
                 this.navbar.closeNavbar();
             }).bind(this),
         );
@@ -75,55 +79,48 @@ export class IndexPage {
                 this.navbar.closeNavbar();
             }).bind(this),
         );
+
+        this.prober.probeBare().then(() => {
+            if (this.proxyUrlSelector.value != "auto" || !this.config.useBare)
+                return;
+            this.setProxyUrl(this.prober.bareUrl ?? "");
+        });
+
+        this.prober.probeWisp().then(() => {
+            if (this.proxyUrlSelector.value != "auto" || this.config.useBare)
+                return;
+            this.setProxyUrl(this.prober.wispUrl ?? "");
+        });
+    }
+
+    private setProxyUrl(url: string) {
+        this.proxy.proxyUrl = url;
+        this.serverAddress.value = url;
     }
 
     public updateServerAddress() {
         if (this.proxyUrlSelector.value === "custom") {
-            this.proxy.proxyUrl = this.config.useBare
+            this.serverAddress.disabled = false;
+            let url = this.config.useBare
                 ? this.config.bareCustomProxy
                 : this.config.wispCustomProxy;
-            this.serverAddress.disabled = false;
+            this.setProxyUrl(url);
         } else if (this.proxyUrlSelector.value === "auto") {
             this.serverAddress.disabled = true;
-            this.serverAddress.value = "";
-            this.proxy.proxyUrl = "";
-            if (this.config.useBare) {
-                if (this.prober.bareUrl == null) {
-                    this.prober.probeBare().then(() => {
-                        if (this.proxyUrlSelector.value != "auto") return;
-                        let url = this.prober.wispUrl ?? "";
-                        this.proxy.proxyUrl = url;
-                        this.serverAddress.value = url;
-                    });
-                } else {
-                    let url = this.prober.bareUrl ?? "";
-                    this.proxy.proxyUrl = url;
-                    this.serverAddress.value = url;
-                }
-            } else {
-                if (this.prober.wispUrl == null) {
-                    this.prober.probeWisp().then(() => {
-                        if (this.proxyUrlSelector.value != "auto") return;
-                        let url = this.prober.wispUrl ?? "";
-                        this.proxy.proxyUrl = url;
-                        this.serverAddress.value = url;
-                    });
-                } else {
-                    let url = this.prober.wispUrl ?? "";
-                    this.proxy.proxyUrl = url;
-                    this.serverAddress.value = url;
-                }
-            }
+            let url =
+                (this.config.useBare
+                    ? this.prober.bareUrl
+                    : this.prober.wispUrl) ?? "";
+            this.setProxyUrl(url);
         } else {
-            this.proxy.proxyUrl = this.proxyUrlSelector.value;
             this.serverAddress.disabled = true;
+            this.setProxyUrl(this.proxyUrlSelector.value);
         }
         if (this.config.useBare) {
             this.config.bareProxyIndex = this.proxyUrlSelector.selectedIndex;
         } else {
             this.config.wispProxyIndex = this.proxyUrlSelector.selectedIndex;
         }
-        this.serverAddress.value = this.proxy.proxyUrl;
         this.config.saveConfig();
     }
 
