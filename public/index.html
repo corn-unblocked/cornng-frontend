@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+    <head>
+        <title>CornNG Pr0xy</title>
+        <link rel="icon" type="image/png" href="img/cornicon.png" />
+        <link rel="stylesheet" href="css/index.css" />
+        <script src="iframesettings.js"></script>
+        <script src="baremux/index.js" defer></script>
+        <script src="baremod/index.js" defer></script>
+        <script src="libcurl/index.js" defer></script>
+        <script src="uv/uv.bundle.js" defer></script>
+        <script src="uv/uv.config.js" defer></script>
+    </head>
+    <body>
+        <div class="vbox fillScreen" style="margin: auto">
+            <img class="banner" src="img/corn.svg" />
+            <div class="hbox">
+                <select id="proxyUrl" class="button" title="Proxy URL"></select>
+                <select id="proxyType" class="button" title="Proxy type">
+                    <option id="wisp">Wisp/Libcurl</option>
+                    <option id="bare">Bare</option>
+                </select>
+                <button
+                    class="button square"
+                    title="Usage help"
+                    onclick="window.open('https://sites.google.com/view/cornunblocked/help/usage')"
+                >
+                    ⓘ
+                </button>
+            </div>
+            <input
+                id="serverAddress"
+                type="text"
+                class="button"
+                title="Custom proxy URL"
+            />
+            <input
+                id="targetAddress"
+                type="text"
+                class="button"
+                value="https://google.com"
+                title="Destination URL"
+            />
+            <button id="startButton" class="button" title="Start proxy">
+                Start
+            </button>
+        </div>
+        <iframe
+            id="proxyIframe"
+            class="fillScreen"
+            style="display: none; background-color: whitesmoke"
+        ></iframe>
+        <div class="hbox" id="navbar" style="display: none">
+            <div>
+                <button class="button square" title="Back" id="backProxy">
+                    ￩
+                </button>
+                <button class="button square" title="Forward" id="forwardProxy">
+                    ￫
+                </button>
+                <button class="button square" title="Reload" id="reloadProxy">
+                    ⟳
+                </button>
+            </div>
+            <input type="text" class="button" style="flex: 1" id="urlBar" />
+            <div>
+                <button
+                    class="button square"
+                    title="Return to proxy select"
+                    id="exitProxy"
+                >
+                    ×
+                </button>
+                <button
+                    class="button square"
+                    title="Close navbar"
+                    id="closeNavbar"
+                >
+                    ↑
+                </button>
+            </div>
+        </div>
+        <button
+            class="button square"
+            style="
+                position: fixed;
+                top: 0px;
+                right: 1vw;
+                margin: 0px;
+                display: none;
+                z-index: 1;
+            "
+            title="Open navbar"
+            id="openNavbar"
+        >
+            ↓
+        </button>
+        <script defer type="module">
+            import * as Manager from "./manager.js";
+            import * as Index from "./index.js";
+            let iframe = document.getElementById("proxyIframe");
+            iframe.allow = iframeAllow;
+            let manager = new Manager.Manager(__uv$config);
+            let index = new Index.IndexPage(manager);
+        </script>
+    </body>
+</html>
