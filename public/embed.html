@@ -8,7 +8,7 @@
                 let newWindow = window.open();
                 let iframe = newWindow.document.createElement("iframe");
                 let a = window.location.href;
-                iframe.src = a.substring(0, a.lastIndexOf("/"));
+                iframe.src = a.substring(0, a.lastIndexOf("/")) + "/index.html";
                 iframe.style =
                     "border: none; position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;";
                 // allow everything (https://developer.mozilla.org/en-US/docs/Web/HTTP/Permissions_Policy#browser_compatibility)
