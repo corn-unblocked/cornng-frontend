@@ -1,4 +1,6 @@
-import { Config, wispProxyUrls, bareProxyUrls } from "./config";
+import { Config } from "./config";
+import { bareProxyUrls, wispProxyUrls } from "./urls";
+import Util from "./util";
 
 export class Prober {
     private config: Config;
@@ -49,6 +51,11 @@ export class Prober {
             let url = proxy;
             if (url == "auto") continue;
             if (url == "custom") url = this.config.wispCustomProxy;
+            try {
+                url = Util.httpToWs(url);
+            } catch (_e) {
+                continue;
+            }
             proxyDetectPromises.push(
                 new Promise((res, rej) => {
                     const socket = new WebSocket(url);

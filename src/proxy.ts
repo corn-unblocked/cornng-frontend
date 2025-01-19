@@ -1,5 +1,6 @@
 import { BareMuxConnection } from "@mercuryworkshop/bare-mux";
 import { Config } from "./config";
+import Util from "./util";
 
 export interface UvConfig {
     prefix: string;
@@ -96,9 +97,8 @@ export class ProxyManager {
             return;
         }
 
-        let proxyUrlObj;
         try {
-            proxyUrlObj = new URL(this.proxyUrl);
+            new URL(this.proxyUrl);
         } catch (err) {
             return;
         }
@@ -106,14 +106,12 @@ export class ProxyManager {
         const loc = this.uvConfig.loc;
         if (this.config.useBare) {
             await this.connection.setTransport(loc + "/baremod/index.mjs", [
-                proxyUrlObj.href,
+                this.proxyUrl,
             ]);
         } else {
             // set to websocket protocol
-            proxyUrlObj.protocol =
-                proxyUrlObj.protocol === "http:" ? "ws:" : "wss:";
             await this.connection.setTransport(loc + "/libcurl/index.mjs", [
-                { wisp: proxyUrlObj.href },
+                { wisp: Util.httpToWs(this.proxyUrl) },
             ]);
         }
 

@@ -1,4 +1,5 @@
-import { bareProxyUrls, Config, wispProxyUrls } from "./config";
+import { Config } from "./config";
+import { bareProxyUrls, wispProxyUrls } from "./urls";
 import { Manager } from "./manager";
 import { Navbar } from "./navbar";
 import { Prober } from "./prober";
@@ -84,10 +85,13 @@ export class IndexPage {
             this.serverAddress.disabled = false;
         } else if (this.proxyUrlSelector.value === "auto") {
             this.serverAddress.disabled = true;
+            this.serverAddress.value = "";
+            this.proxy.proxyUrl = "";
             if (this.config.useBare) {
                 if (this.prober.bareUrl == null) {
                     this.prober.probeBare().then(() => {
-                        let url = this.prober.bareUrl ?? "";
+                        if (this.proxyUrlSelector.value != "auto") return;
+                        let url = this.prober.wispUrl ?? "";
                         this.proxy.proxyUrl = url;
                         this.serverAddress.value = url;
                     });
@@ -99,6 +103,7 @@ export class IndexPage {
             } else {
                 if (this.prober.wispUrl == null) {
                     this.prober.probeWisp().then(() => {
+                        if (this.proxyUrlSelector.value != "auto") return;
                         let url = this.prober.wispUrl ?? "";
                         this.proxy.proxyUrl = url;
                         this.serverAddress.value = url;
@@ -137,6 +142,7 @@ export class IndexPage {
     }
 
     public updateCustomProxy() {
+        this.proxy.proxyUrl = this.serverAddress.value;
         if (this.config.useBare) {
             this.config.bareCustomProxy = this.serverAddress.value;
         } else {
