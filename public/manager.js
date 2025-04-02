@@ -1,47 +1,4 @@
 // src/config.ts
-var Config = class {
-  // config version (incrementing forces a config rewrite)
-  configVersion;
-  // whether to use bare or wisp
-  useBare;
-  // these 4 are pretty self explanatory
-  wispProxyIndex;
-  wispCustomProxy;
-  bareProxyIndex;
-  bareCustomProxy;
-  // auto detect proxy timeout (ms)
-  probeTimeout;
-  constructor() {
-    this.configVersion = 1;
-    this.useBare = false;
-    this.wispProxyIndex = 0;
-    this.wispCustomProxy = "";
-    this.bareProxyIndex = 0;
-    this.bareCustomProxy = "";
-    this.loadConfig();
-    this.probeTimeout = 5e3;
-  }
-  saveConfig() {
-    localStorage.setItem("config", JSON.stringify(this));
-  }
-  loadConfig() {
-    let str = localStorage.getItem("config");
-    if (str == null) {
-      this.saveConfig();
-      return;
-    }
-    let tmp = JSON.parse(str);
-    if (tmp.configVersion == void 0 || tmp.configVersion < this.configVersion) {
-      this.saveConfig();
-      return;
-    }
-    for (let a2 in tmp) {
-      this[a2] = tmp[a2];
-    }
-  }
-};
-
-// src/urls.ts
 var bareProxyUrls = {
   auto: "Auto",
   custom: "Custom",
@@ -77,8 +34,51 @@ var wispProxyUrls = {
   "wss://anura.pro/": "Anura 1",
   "wss://adoptmy.baby/": "Anura 2",
   "wss://wallstjournal.click/": "Anura 3",
+  "wss://avoidingice.xyz/": "Anura 4",
+  "wss://maamplease.in/": "Anura 5",
   "wss://phantom.lol/wisp/": "Phantom",
   "wss://wisp.mercurywork.shop/": "Mercury"
+};
+var Config = class {
+  // config version (incrementing forces a config rewrite)
+  configVersion;
+  // whether to use bare or wisp
+  useBare;
+  // these 4 are pretty self explanatory
+  wispProxyIndex;
+  wispCustomProxy;
+  bareProxyIndex;
+  bareCustomProxy;
+  // auto detect proxy timeout (ms)
+  probeTimeout;
+  constructor() {
+    this.configVersion = 1;
+    this.useBare = false;
+    this.wispProxyIndex = 0;
+    this.wispCustomProxy = "";
+    this.bareProxyIndex = 0;
+    this.bareCustomProxy = "";
+    this.probeTimeout = 5e3;
+    this.loadConfig();
+  }
+  saveConfig() {
+    localStorage.setItem("config", JSON.stringify(this));
+  }
+  loadConfig() {
+    let str = localStorage.getItem("config");
+    if (str == null) {
+      this.saveConfig();
+      return;
+    }
+    let tmp = JSON.parse(str);
+    if (tmp.configVersion == void 0 || tmp.configVersion < this.configVersion) {
+      this.saveConfig();
+      return;
+    }
+    for (let a2 in tmp) {
+      this[a2] = tmp[a2];
+    }
+  }
 };
 
 // src/util.ts

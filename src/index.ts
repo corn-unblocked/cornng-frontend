@@ -1,5 +1,4 @@
-import { Config } from "./config";
-import { bareProxyUrls, wispProxyUrls } from "./urls";
+import { Config, bareProxyUrls, wispProxyUrls } from "./config";
 import { Manager } from "./manager";
 import { Navbar } from "./navbar";
 import { Prober } from "./prober";

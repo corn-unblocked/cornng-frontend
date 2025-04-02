@@ -1,4 +1,4 @@
-// src/urls.ts
+// src/config.ts
 var bareProxyUrls = {
   auto: "Auto",
   custom: "Custom",
@@ -34,6 +34,8 @@ var wispProxyUrls = {
   "wss://anura.pro/": "Anura 1",
   "wss://adoptmy.baby/": "Anura 2",
   "wss://wallstjournal.click/": "Anura 3",
+  "wss://avoidingice.xyz/": "Anura 4",
+  "wss://maamplease.in/": "Anura 5",
   "wss://phantom.lol/wisp/": "Phantom",
   "wss://wisp.mercurywork.shop/": "Mercury"
 };

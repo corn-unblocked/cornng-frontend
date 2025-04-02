@@ -12,6 +12,7 @@ export const bareProxyUrls = {
     "https://definitelyscience.com/bare/": "Definitely Science 1",
     "https://onlinegames.ro/bare/": "Definitely Science 2",
     "https://mages.io/bare/": "Definitely Science 3",
+    "https://lichology.com/bare/": "Definitely Science 4",
     "https://kazwire.com/bare/": "Kazwire",
 };
 
@@ -29,6 +30,13 @@ export const wispProxyUrls = {
     "wss://definitelyscience.com/wisp/": "Definitely Science 1",
     "wss://onlinegames.ro/wisp/": "Definitely Science 2",
     "wss://mages.io/wisp/": "Definitely Science 3",
+    "wss://lichology.com/wisp/": "Definitely Science 4",
+    "wss://anura.pro/": "Anura 1",
+    "wss://adoptmy.baby/": "Anura 2",
+    "wss://wallstjournal.click/": "Anura 3",
+    "wss://avoidingice.xyz/": "Anura 4",
+    "wss://maamplease.in/": "Anura 5",
+    "wss://phantom.lol/wisp/": "Phantom",
     "wss://wisp.mercurywork.shop/": "Mercury",
 };
 
@@ -52,8 +60,8 @@ export class Config {
         this.wispCustomProxy = "";
         this.bareProxyIndex = 0;
         this.bareCustomProxy = "";
-        this.loadConfig();
         this.probeTimeout = 5000;
+        this.loadConfig();
     }
 
     public saveConfig(): void {
