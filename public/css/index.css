@@ -48,21 +48,30 @@ div#navbar {
     border: none;
     margin: 10px auto;
     width: 200px;
+    height: 44px;
     transition-duration: 0.5s;
     background-color: gainsboro;
     color: black;
-    padding: 10px 20px;
+    padding: 14px 20px;
+    border-radius: 8px;
     text-align: center;
     text-decoration: none;
     font-size: 16px;
 }
 
 .square.button {
-    width: 42px;
+    width: 44px;
     aspect-ratio: 1/1;
     padding: 0px;
     font-size: 24px;
     line-height: 0px;
+}
+
+
+
+#openNavbar {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
 }
 
 input.button {

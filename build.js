@@ -37,15 +37,12 @@ shell.cp(
 shell.cp("-rf", "www/*", buildOptions.targetPath);
 shell.cp("LICENSE", buildOptions.targetPath);
 
-await esbuild.build({
-    entryPoints: ["src/index.ts"],
-    bundle: true,
-    outfile: buildOptions.targetPath + "/index.js",
-    format: "esm"
-});
-await esbuild.build({
-    entryPoints: ["src/manager.ts"],
-    bundle: true,
-    outfile: buildOptions.targetPath + "/manager.js",
-    format: "esm"
-});
+let jsTargets = ["index", "manager"];
+for (const target in jsTargets) {
+    await esbuild.build({
+        entryPoints: ["src/" + target + ".ts"],
+        bundle: true,
+        outfile: buildOptions.targetPath + "/" + target + ".js",
+        format: "esm"
+    });    
+}
