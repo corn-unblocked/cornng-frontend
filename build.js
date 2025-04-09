@@ -38,7 +38,7 @@ shell.cp("-rf", "www/*", buildOptions.targetPath);
 shell.cp("LICENSE", buildOptions.targetPath);
 
 let jsTargets = ["index", "manager"];
-for (const target in jsTargets) {
+for (const target of jsTargets) {
     await esbuild.build({
         entryPoints: ["src/" + target + ".ts"],
         bundle: true,
