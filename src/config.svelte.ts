@@ -34,48 +34,41 @@ export const wispProxyUrls = {
 
 export class Config {
     // config version (incrementing forces a config rewrite)
-    public configVersion: number;
+    public configVersion: number = $state(1);
     // whether to use bare or wisp
-    public useBare: boolean;
+    public useBare: boolean = $state(false);
     // these 4 are pretty self explanatory
-    public wispProxyIndex: number;
-    public wispCustomProxy: string;
-    public bareProxyIndex: number;
-    public bareCustomProxy: string;
+    public wispProxyIndex: number = $state(0);
+    public wispCustomProxy: string = $state("");
+    public bareProxyIndex: number = $state(0);
+    public bareCustomProxy: string = $state("");
     // auto detect proxy timeout (ms)
-    public probeTimeout: number;
-
-    public constructor() {
-        this.configVersion = 1;
-        this.useBare = false;
-        this.wispProxyIndex = 0;
-        this.wispCustomProxy = "";
-        this.bareProxyIndex = 0;
-        this.bareCustomProxy = "";
-        this.loadConfig();
-        this.probeTimeout = 5000;
-    }
-
-    public saveConfig(): void {
-        localStorage.setItem("config", JSON.stringify(this));
-    }
-    public loadConfig(): void {
-        let str = localStorage.getItem("config");
-        if (str == null) {
-            this.saveConfig();
-            return;
-        }
-        let tmp = JSON.parse(str);
-        // overwrite old configs
-        if (
-            tmp.configVersion == undefined ||
-            tmp.configVersion < this.configVersion
-        ) {
-            this.saveConfig();
-            return;
-        }
-        for (let a in tmp) {
-            this[a] = tmp[a];
-        }
-    }
+    public probeTimeout: number = $state(5000);
 }
+
+export function saveConfig(config: Config): void {
+    localStorage.setItem("config", JSON.stringify(config));
+}
+
+function loadConfig(): Config {
+    const config = new Config();
+    let str = localStorage.getItem("config");
+    if (str == null) {
+        return config;
+    }
+    let tmp = JSON.parse(str);
+    // overwrite old configs
+    if (
+        tmp.configVersion == undefined ||
+        tmp.configVersion < config.configVersion
+    ) {
+        return config;
+    }
+    for (let a in tmp) {
+        config[a] = tmp[a];
+    }
+    return config;
+}
+
+const config = $state(loadConfig());
+export default config;
