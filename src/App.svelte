@@ -84,5 +84,11 @@
                 Help
             </button>
         </div>
+        <footer class="mt-10 text-xs">
+            ©2025 Corn Unblocked under the <a
+                href="https://github.com/corn-unblocked/cornng-frontend/blob/master/LICENSE"
+                >GNU AGPL v3.0</a
+            >
+        </footer>
     </div>
 {/if}
