@@ -21,21 +21,6 @@ export class Config {
     public bareCustomProxy: string = $state("");
     // auto detect proxy timeout (ms)
     public probeTimeout: number = $state(5000);
-
-    constructor(cfg?: SaveableConfig) {
-        if (cfg == undefined) return;
-        for (const prop in cfg) {
-            eval(`cfg.#${prop} = cfg.${prop};`);
-        }
-    }
-
-    toSaveableConfig(): SaveableConfig {
-        const ret = new SaveableConfig();
-        for (const prop in ret) {
-            eval(`ret.${prop} = this.#${prop};`);
-        }
-        return ret;
-    }
 }
 
 export function saveConfig(cfg: Config): void {
