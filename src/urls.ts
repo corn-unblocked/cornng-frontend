@@ -36,4 +36,7 @@ export const wispProxyUrls = {
     "wss://wallstjournal.click/": "Anura 3",
     "wss://phantom.lol/wisp/": "Phantom",
     "wss://wisp.mercurywork.shop/": "Mercury",
+    "wss://quantumchemistry.club/wisp/": "Terbium2 1",
+    "wss://explorechemistry.online/wisp/": "Terbium2 2",
+    "wss://webmath.help/wisp/": "Terbium2 3",
 };
