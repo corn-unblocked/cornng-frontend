@@ -1,7 +1,13 @@
-export default class Util {
-    public static httpToWs(url: string): string {
-        let urlObj = new URL(url);
-        urlObj.protocol = urlObj.protocol === "http:" ? "ws:" : "wss:";
-        return urlObj.toString();
-    }
+export function httpUrlToWebSocket(url: string): string {
+    let urlObj = new URL(url);
+    urlObj.protocol = urlObj.protocol === "http:" ? "ws:" : "wss:";
+    return urlObj.toString();
+}
+
+export function onEnterKeyPressed(func: () => void): (ev: KeyboardEvent) => void {
+    return (ev: KeyboardEvent) => {
+        if (ev.key === "Enter") {
+            func();
+        }
+    };
 }

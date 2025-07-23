@@ -34,56 +34,6 @@ export const wispProxyUrls = {
     "wss://anura.pro/": "Anura 1",
     "wss://adoptmy.baby/": "Anura 2",
     "wss://wallstjournal.click/": "Anura 3",
-    "wss://avoidingice.xyz/": "Anura 4",
-    "wss://maamplease.in/": "Anura 5",
     "wss://phantom.lol/wisp/": "Phantom",
     "wss://wisp.mercurywork.shop/": "Mercury",
 };
-
-export class Config {
-    // config version (incrementing forces a config rewrite)
-    public configVersion: number;
-    // whether to use bare or wisp
-    public useBare: boolean;
-    // these 4 are pretty self explanatory
-    public wispProxyIndex: number;
-    public wispCustomProxy: string;
-    public bareProxyIndex: number;
-    public bareCustomProxy: string;
-    // auto detect proxy timeout (ms)
-    public probeTimeout: number;
-
-    public constructor() {
-        this.configVersion = 1;
-        this.useBare = false;
-        this.wispProxyIndex = 0;
-        this.wispCustomProxy = "";
-        this.bareProxyIndex = 0;
-        this.bareCustomProxy = "";
-        this.probeTimeout = 5000;
-        this.loadConfig();
-    }
-
-    public saveConfig(): void {
-        localStorage.setItem("config", JSON.stringify(this));
-    }
-    public loadConfig(): void {
-        let str = localStorage.getItem("config");
-        if (str == null) {
-            this.saveConfig();
-            return;
-        }
-        let tmp = JSON.parse(str);
-        // overwrite old configs
-        if (
-            tmp.configVersion == undefined ||
-            tmp.configVersion < this.configVersion
-        ) {
-            this.saveConfig();
-            return;
-        }
-        for (let a in tmp) {
-            this[a] = tmp[a];
-        }
-    }
-}

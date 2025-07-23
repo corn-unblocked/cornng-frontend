@@ -1,29 +1,20 @@
-import { Config, bareProxyUrls, wispProxyUrls } from "./config";
-import Util from "./util";
+import { bareProxyUrls, wispProxyUrls } from "./urls";
+import config from "./config.svelte";
 
-export class Prober {
-    private config: Config;
-
-    public wispUrl: string | null;
-    public bareUrl: string | null;
-
-    public constructor(config: Config) {
-        this.config = config;
-        this.wispUrl = null;
-        this.bareUrl = null;
-    }
+class Prober {
+    public wispUrl: string = $state("");
+    public bareUrl: string = $state("");
 
     public async probeBare() {
         let proxyDetectPromises: Promise<string>[] = [];
         for (const proxy in bareProxyUrls) {
             let url = proxy;
-            if (url == "auto") continue;
-            if (url == "custom") url = this.config.bareCustomProxy;
+            if (url === "auto" || url === "custom") continue;
             proxyDetectPromises.push(
                 new Promise((res, rej) => {
                     setTimeout(() => {
                         rej("Failed to fetch bare on " + url);
-                    }, this.config.probeTimeout);
+                    }, config.probeTimeout);
                     fetch(url).then((rsp) => {
                         if (rsp.status == 200) {
                             res(url);
@@ -48,13 +39,7 @@ export class Prober {
         let proxyDetectPromises: Promise<string>[] = [];
         for (const proxy in wispProxyUrls) {
             let url = proxy;
-            if (url == "auto") continue;
-            if (url == "custom") url = this.config.wispCustomProxy;
-            try {
-                url = Util.httpToWs(url);
-            } catch (_e) {
-                continue;
-            }
+            if (url === "auto" || url === "custom") continue;
             proxyDetectPromises.push(
                 new Promise((res, rej) => {
                     const socket = new WebSocket(url);
@@ -66,7 +51,7 @@ export class Prober {
                             socket.close();
                             rej("Failed to open websocket on " + url);
                         }
-                    }, this.config.probeTimeout);
+                    }, config.probeTimeout);
                     socket.onopen = () => {
                         socket.close();
                         res(url);
@@ -79,3 +64,6 @@ export class Prober {
         });
     }
 }
+
+const autoProxyProber = $state(new Prober());
+export default autoProxyProber;
