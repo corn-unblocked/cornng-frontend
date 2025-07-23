@@ -2,6 +2,7 @@ import { BareMuxConnection } from "@mercuryworkshop/bare-mux";
 import ProxyComponent from "./Proxy.svelte";
 import config from "./config.svelte";
 import { httpUrlToWebSocket } from "./util";
+import autoProxyProber from "./prober.svelte";
 
 interface UvConfig {
     prefix: string;
@@ -23,6 +24,8 @@ export class ProxyManager {
     // set when ProxyComponent loads
     proxyComponent: ProxyComponent | undefined;
     bareMuxConnection: BareMuxConnection | undefined;
+
+    isProxyOpen: boolean = $state(false);
     
     url: string = $state("");
     iframeUrl: string = $state("");
@@ -30,14 +33,26 @@ export class ProxyManager {
         this.iframeUrl = this.uvConfig.prefix + this.uvConfig.encodeUrl(this.url);
     }
 
+    proxyUrl = $derived.by(() => {
+        if (config.useBare) {
+            if (config.bareSelectedProxy === "auto") return autoProxyProber.bareUrl;
+            else if (config.bareSelectedProxy === "custom") return config.bareCustomProxy;
+            else return config.bareSelectedProxy;
+        } else {
+            if (config.wispSelectedProxy === "auto") return autoProxyProber.wispUrl;
+            else if (config.wispSelectedProxy === "custom") return config.wispCustomProxy;
+            else return config.wispSelectedProxy;
+        }
+    });
+
     setDestination(destination: string) {
         if (destination === "") {
-            this.url = "https://google.com";
+            this.url = "https://duckduckgo.com";
             return;
         }
         if (!destination.includes(".")) {
             this.url =
-                "https://google.com/search?q=" + destination;
+                "https://duckduckgo.com/?q=" + destination;
             return;
         }
         if (
@@ -81,15 +96,14 @@ export class ProxyManager {
 
         await this.registerSW();
 
-        // todo - set proxy urls
         if (config.useBare) {
             await this.bareMuxConnection.setTransport(loc + "/baremod/index.mjs", [
-                "https://aluu.xyz/bare/"
+                this.proxyUrl
             ]);
         } else {
             // set to websocket protocol
             await this.bareMuxConnection.setTransport(loc + "/libcurl/index.mjs", [
-                { wisp: httpUrlToWebSocket("wss://phantom.lol/wisp/") },
+                { wisp: httpUrlToWebSocket(this.proxyUrl) },
             ]);
         }
 

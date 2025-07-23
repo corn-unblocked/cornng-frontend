@@ -1,73 +1,73 @@
-export const bareProxyUrls = {
-    auto: "Auto",
-    custom: "Custom",
-    "https://aluu.xyz/bare/": "Alu 1",
-    "https://freemathhw.xyz/bare/": "Alu 2",
-    "https://canvaslogin.org/bare/": "Alu 3",
-    "https://tnlnda.xyz/bare/": "Alu 4",
-    "https://incog.works/bare/": "Incognito 1",
-    "https://math.mathpuns.lol/bare/": "Incognito 2",
-    "https://math.americahistory.online/bare/": "Incognito 3",
-    "https://english.geniuslecture.club/bare/": "Incognito 4",
-    "https://definitelyscience.com/bare/": "Definitely Science 1",
-    "https://onlinegames.ro/bare/": "Definitely Science 2",
-    "https://mages.io/bare/": "Definitely Science 3",
-    "https://kazwire.com/bare/": "Kazwire",
-};
+class SaveableConfig {
+    configVersion: number;
+    useBare: boolean;
+    wispSelectedProxy: string;
+    wispCustomProxy: string;
+    bareSelectedProxy: string;
+    bareCustomProxy: string;
+    probeTimeout: number;
 
-export const wispProxyUrls = {
-    auto: "Auto",
-    custom: "Custom",
-    "wss://aluu.xyz/wisp/": "Alu 1",
-    "wss://freemathhw.xyz/wisp/": "Alu 2",
-    "wss://canvaslogin.org/wisp/": "Alu 3",
-    "wss://tnlnda.xyz/wisp/": "Alu 4",
-    "wss://incog.works/wisp/": "Incognito 1",
-    "wss://math.mathpuns.lol/wisp/": "Incognito 2",
-    "wss://math.americahistory.online/wisp/": "Incognito 3",
-    "wss://english.geniuslecture.club/wisp/": "Incognito 4",
-    "wss://definitelyscience.com/wisp/": "Definitely Science 1",
-    "wss://onlinegames.ro/wisp/": "Definitely Science 2",
-    "wss://mages.io/wisp/": "Definitely Science 3",
-    "wss://wisp.mercurywork.shop/": "Mercury",
-};
+}
 
 export class Config {
     // config version (incrementing forces a config rewrite)
-    public configVersion: number = $state(1);
+    public configVersion: number = $state(2);
     // whether to use bare or wisp
     public useBare: boolean = $state(false);
     // these 4 are pretty self explanatory
-    public wispProxyIndex: number = $state(0);
+    public wispSelectedProxy: string = $state("auto");
     public wispCustomProxy: string = $state("");
-    public bareProxyIndex: number = $state(0);
+    public bareSelectedProxy: string = $state("auto");
     public bareCustomProxy: string = $state("");
     // auto detect proxy timeout (ms)
     public probeTimeout: number = $state(5000);
+
+    constructor(cfg?: SaveableConfig) {
+        if (cfg == undefined) return;
+        for (const prop in cfg) {
+            eval(`cfg.#${prop} = cfg.${prop};`);
+        }
+    }
+
+    toSaveableConfig(): SaveableConfig {
+        const ret = new SaveableConfig();
+        for (const prop in ret) {
+            eval(`ret.${prop} = this.#${prop};`);
+        }
+        return ret;
+    }
 }
 
-export function saveConfig(config: Config): void {
-    localStorage.setItem("config", JSON.stringify(config));
+export function saveConfig(cfg: Config): void {
+    localStorage.setItem("config", JSON.stringify({
+        configVersion: cfg.configVersion,
+        useBare: cfg.useBare,
+        wispSelectedProxy: cfg.wispSelectedProxy,
+        wispCustomProxy: cfg.wispCustomProxy,
+        bareSelectedProxy: cfg.bareSelectedProxy,
+        bareCustomProxy: cfg.bareCustomProxy,
+        probeTimeout: cfg.probeTimeout,
+    }));
 }
 
 function loadConfig(): Config {
-    const config = new Config();
+    const ret = new Config();
     let str = localStorage.getItem("config");
     if (str == null) {
-        return config;
+        return ret;
     }
-    let tmp = JSON.parse(str);
+    let tmp = JSON.parse(str) as SaveableConfig;
     // overwrite old configs
     if (
         tmp.configVersion == undefined ||
-        tmp.configVersion < config.configVersion
+        tmp.configVersion < ret.configVersion
     ) {
-        return config;
+        return ret;
     }
-    for (let a in tmp) {
-        config[a] = tmp[a];
+    for (const prop in tmp) {
+        ret[prop] = tmp[prop];
     }
-    return config;
+    return ret;
 }
 
 const config = $state(loadConfig());

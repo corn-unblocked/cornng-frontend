@@ -1,9 +1,9 @@
 import { bareProxyUrls, wispProxyUrls } from "./urls";
 import config from "./config.svelte";
 
-export class Prober {
-    public wispUrl: string | null = null;
-    public bareUrl: string | null = null;
+class Prober {
+    public wispUrl: string = $state("");
+    public bareUrl: string = $state("");
 
     public async probeBare() {
         let proxyDetectPromises: Promise<string>[] = [];
@@ -64,3 +64,6 @@ export class Prober {
         });
     }
 }
+
+const autoProxyProber = $state(new Prober());
+export default autoProxyProber;
