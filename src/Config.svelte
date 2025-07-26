@@ -1,9 +1,13 @@
 <script lang="ts">
-    import config from "./config.svelte";
+    import config, { saveConfig } from "./config.svelte";
     import { bareProxyUrls, wispProxyUrls } from "./urls";
 
     let { isConfigOpen = $bindable() }: { isConfigOpen: boolean } = $props();
     let modalElement: HTMLDialogElement = $state();
+
+    $effect(() => {
+        saveConfig(config);
+    });
 
     $effect(() => {
         if (isConfigOpen) {
@@ -15,7 +19,6 @@
 </script>
 
 <dialog
-    id="configModal"
     class="modal z-50"
     bind:this={modalElement}
     onclose={() => (isConfigOpen = false)}

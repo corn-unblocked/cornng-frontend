@@ -20,8 +20,10 @@
     }
 </script>
 
-{#if isNavbarOpen}
-    <div class="fixed top-0 w-screen flex flex-row gap-1 z-50 p-2">
+<svelte:window onblur={() => (isNavbarOpen = false)} />
+
+<div class="fixed top-0 w-screen flex flex-row gap-1 z-50 p-2">
+    {#if isNavbarOpen}
         <div>
             <button
                 class="btn btn-square"
@@ -48,13 +50,17 @@
         <input
             type="text"
             class="input flex grow-1"
-            id="urlBar"
             value={proxyManager.url}
             onkeydown={onEnterKeyPressed(() => {
                 proxyManager.setDestination(urlBar.value);
                 proxyManager.reloadIframe();
             })}
+            {@attach (urlBar: HTMLInputElement) => {
+                urlBar.focus();
+                urlBar.select();
+            }}
             bind:this={urlBar}
+            placeholder="Enter a URL or search the web"
         />
         <div>
             <button
@@ -72,13 +78,16 @@
                 ↑
             </button>
         </div>
-    </div>
-{:else}
-    <button
-        class="btn btn-square fixed top-0 right-1 z-50"
-        title="Open navbar"
-        onclick={() => (isNavbarOpen = true)}
-    >
-        ↓
-    </button>
-{/if}
+    {:else}
+        <div class="grow-1"></div>
+        <button
+            class="btn btn-square"
+            title="Open navbar"
+            onclick={() => {
+                isNavbarOpen = true;
+            }}
+        >
+            ↓
+        </button>
+    {/if}
+</div>
