@@ -22,7 +22,11 @@
 
 <svelte:window onblur={() => (isNavbarOpen = false)} />
 
-<div class="fixed top-0 w-screen flex flex-row gap-1 z-50 p-2">
+<div
+    class="fixed top-0 {isNavbarOpen
+        ? 'w-screen'
+        : 'right-0 pointer-events-none'} flex flex-row gap-1 z-50 p-2"
+>
     {#if isNavbarOpen}
         <div>
             <button
@@ -61,6 +65,7 @@
             }}
             bind:this={urlBar}
             placeholder="Enter a URL or search the web"
+            title="URL Bar"
         />
         <div>
             <button
@@ -79,9 +84,8 @@
             </button>
         </div>
     {:else}
-        <div class="grow-1"></div>
         <button
-            class="btn btn-square"
+            class="btn btn-square pointer-events-auto"
             title="Open navbar"
             onclick={() => {
                 isNavbarOpen = true;
