@@ -50,7 +50,7 @@ export class ProxyManager {
             this.url = "https://duckduckgo.com";
             return;
         }
-        if (!destination.includes(".")) {
+        if (!destination.includes(".") || destination.includes(" ")) {
             this.url =
                 "https://duckduckgo.com/?q=" + destination;
             return;

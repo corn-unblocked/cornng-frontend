@@ -1,16 +1,17 @@
 <script lang="ts">
     import Config from "./Config.svelte";
     import Proxy from "./Proxy.svelte";
-    import config, { saveConfig } from "./config.svelte";
+    import config from "./config.svelte";
     import proxyManager from "./proxy.svelte";
     import { onEnterKeyPressed } from "./util";
     import autoProxyProber from "./prober.svelte";
 
-    autoProxyProber.probeBare();
-    autoProxyProber.probeWisp();
-
     $effect(() => {
-        saveConfig(config);
+        if (config.useBare && config.bareSelectedProxy === "auto") {
+            autoProxyProber.probeBare();
+        } else if (config.wispSelectedProxy === "auto") {
+            autoProxyProber.probeWisp();
+        }
     });
 
     let destinationInput = $state("");
@@ -22,6 +23,7 @@
         proxyManager.setDestination(destinationInput);
         proxyManager.startProxy();
         proxyManager.isProxyOpen = true;
+        destinationInput = "";
     }
 </script>
 
@@ -29,8 +31,8 @@
     <Proxy></Proxy>
 {:else}
     <Config bind:isConfigOpen></Config>
-    <div class="w-screen h-screen flex flex-col items-center p-10">
-        <picture class="w-1/2 grow-1">
+    <div class="w-screen h-screen flex flex-col items-center p-10 gap-[5vh]">
+        <picture class="w-3/4 min-w-60 max-h-1/3 grow-1">
             <source
                 srcset="img/corn-dark.svg"
                 media="(prefers-color-scheme: dark)"
@@ -42,17 +44,22 @@
                 alt="Corn Unblocked"
             />
         </picture>
-        <div class="flex flex-col grow-1 gap-10 w-full items-center">
+        <div
+            class="flex flex-col grow-1 gap-[5vh] w-full items-center justify-center"
+        >
             <input
                 type="text"
-                class="input w-1/2"
+                class="input w-1/2 min-w-40"
                 title="Destination URL"
                 placeholder="Enter a URL or search the web"
                 onkeydown={onEnterKeyPressed(startProxy)}
+                {@attach (urlBar: HTMLInputElement) => {
+                    urlBar.focus();
+                }}
                 bind:value={destinationInput}
             />
             <span
-                class="tooltip w-1/8"
+                class="tooltip w-1/8 min-w-30"
                 data-tip={proxyManager.proxyUrl === ""
                     ? "Proxy URL not found! Go to settings and configure proxy server"
                     : ""}
@@ -65,7 +72,7 @@
                 >
             </span>
         </div>
-        <div class="flex flex-row w-1/3 justify-evenly">
+        <div class="flex flex-row w-1/3 min-w-40 justify-evenly">
             <button
                 class="btn w-4/9"
                 title="Open settings"
@@ -84,7 +91,7 @@
                 Help
             </button>
         </div>
-        <footer class="mt-10 text-xs">
+        <footer class="mt-10 text-xs text-center">
             ©2025 Corn Unblocked under the <a
                 href="https://github.com/corn-unblocked/cornng-frontend/blob/master/LICENSE"
                 >GNU AGPL v3.0</a
