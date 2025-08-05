@@ -5,3 +5,7 @@ Configurable static frontend for [Ultraviolet](https://github.com/titaniumnetwor
 Works with Wisp and Bare and can be hosted on any static hosting site (including those that host without root path, such as GitHub sites)
 
 Tested on Chrome, Edge, and Firefox. Resilient against Lightspeed Filter and GoGuardian. Recommended access method is through https://sites.google.com/view/cornunblocked.
+
+## forking/improving
+
+Edit `src/corn.ts` to add or remove splash text and proxy backends. Remember that the site is licensed under the GNU AGPL V3.0 (as is Ultraviolet) and any edits must be published as open-source before deployment.

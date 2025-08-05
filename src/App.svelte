@@ -21,8 +21,8 @@
     function startProxy() {
         if (proxyManager.proxyUrl === "") return;
         proxyManager.setDestination(destinationInput);
-        proxyManager.startProxy();
         proxyManager.isProxyOpen = true;
+        proxyManager.startProxy();
         destinationInput = "";
     }
 </script>

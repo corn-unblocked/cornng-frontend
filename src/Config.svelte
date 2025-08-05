@@ -1,6 +1,6 @@
 <script lang="ts">
     import config, { saveConfig } from "./config.svelte";
-    import { bareProxyUrls, wispProxyUrls } from "./urls";
+    import { bareProxyUrls, wispProxyUrls } from "./corn";
 
     let { isConfigOpen = $bindable() }: { isConfigOpen: boolean } = $props();
     let modalElement: HTMLDialogElement = $state();
@@ -39,7 +39,9 @@
                             <button
                                 onclick={() => {
                                     config.useBare = false;
-                                    document.activeElement.blur();
+                                    (
+                                        document.activeElement as HTMLElement
+                                    ).blur();
                                 }}>Wisp</button
                             >
                         </li>
@@ -47,7 +49,9 @@
                             <button
                                 onclick={() => {
                                     config.useBare = true;
-                                    document.activeElement.blur();
+                                    (
+                                        document.activeElement as HTMLElement
+                                    ).blur();
                                 }}>Bare</button
                             >
                         </li>
@@ -72,7 +76,9 @@
                                         } else {
                                             config.wispSelectedProxy = proxyUrl;
                                         }
-                                        document.activeElement.blur();
+                                        (
+                                            document.activeElement as HTMLElement
+                                        ).blur();
                                     }}>{proxyName}</button
                                 >
                             </li>

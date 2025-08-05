@@ -77,15 +77,6 @@ export class ProxyManager {
 
             throw new Error("Your browser doesn't support service workers.");
         }
-        // do not reregister
-        if (
-            (await navigator.serviceWorker.getRegistrations()).some(
-                (x) =>
-                    x.active !== null &&
-                    x.active.scriptURL == this.uvConfig.stockSW,
-            )
-        )
-            return;
         await navigator.serviceWorker.register(this.uvConfig.stockSW);
     }
 
