@@ -34,7 +34,7 @@
             <div class="grid grid-cols-2 gap-5 w-1/1">
                 <p class="flex items-center justify-center">Proxy Backend</p>
                 <div class="dropdown">
-                    <div tabindex="0" role="button" class="btn m-1 w-1/1">
+                    <div tabindex="0" role="button" class="btn w-1/1">
                         {config.useBare ? "Bare" : "Wisp"}
                     </div>
                     <ul
@@ -64,7 +64,7 @@
                 </div>
                 <p class="flex items-center justify-center">Proxy Server</p>
                 <div class="dropdown">
-                    <div tabindex="0" role="button" class="btn m-1 w-1/1">
+                    <div tabindex="0" role="button" class="btn w-1/1">
                         {config.useBare
                             ? bareProxyUrls[config.bareSelectedProxy]
                             : wispProxyUrls[config.wispSelectedProxy]}
@@ -90,23 +90,27 @@
                         {/each}
                     </ul>
                 </div>
-                <p class="flex items-center justify-center">Custom Proxy URL</p>
-                <input
-                    class="input w-1/1 text-center"
-                    bind:value={
-                        () =>
-                            config.useBare
-                                ? config.bareCustomProxy
-                                : config.wispCustomProxy,
-                        (v) => {
-                            if (config.useBare) {
-                                config.bareCustomProxy = v;
-                            } else {
-                                config.wispCustomProxy = v;
+                {#if config.useBare ? config.bareSelectedProxy : config.wispSelectedProxy === "custom"}
+                    <p class="flex items-center justify-center">
+                        Custom Proxy URL
+                    </p>
+                    <input
+                        class="input w-1/1 text-center"
+                        bind:value={
+                            () =>
+                                config.useBare
+                                    ? config.bareCustomProxy
+                                    : config.wispCustomProxy,
+                            (v) => {
+                                if (config.useBare) {
+                                    config.bareCustomProxy = v;
+                                } else {
+                                    config.wispCustomProxy = v;
+                                }
                             }
                         }
-                    }
-                />
+                    />
+                {/if}
                 <p class="flex items-center justify-center">Adblock</p>
                 <div class="flex items-center justify-center">
                     <input

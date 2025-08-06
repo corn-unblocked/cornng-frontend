@@ -27,9 +27,10 @@ export class ServiceWorkerConfig {
 }
 
 export class ProxyManager {
-    // set in App.svelte
+    // set in index.html
     uvConfig: UvConfig;
     bareMuxConnection: BareMuxConnection;
+    serviceWorker: ServiceWorker | null = $state(null);
 
     async initializeProxy() {
         this.bareMuxConnection = new BareMuxConnection(this.uvConfig.loc + "/baremux/worker.js");
@@ -110,13 +111,25 @@ export class ProxyManager {
         }
 
         let sw = await navigator.serviceWorker.register(this.uvConfig.stockSW);
-        this.updateSWConfig(new ServiceWorkerConfig(config.adblock), sw);
+        // wait for the service worker to activate
+        while (!sw.active);
+        this.serviceWorker = sw.active;
+        this.updateSWConfig(new ServiceWorkerConfig(config.adblock));
     }
 
-    async updateSWConfig(cfg: ServiceWorkerConfig, optSw?: ServiceWorkerRegistration) {
-        let sw = optSw ?? (await navigator.serviceWorker.getRegistrations())[0];
-        if (sw == undefined) return;
-        sw.active?.postMessage(cfg);
+    async updateSWConfig(cfg: ServiceWorkerConfig) {
+        if (!this.serviceWorker) return;
+        this.serviceWorker.postMessage(cfg);
+    }
+
+    startProxy(destinationInput: string): boolean {
+        // poke the service worker to get it started up again
+        if (proxyManager.proxyUrl === "" || !proxyManager.serviceWorker)
+            return false;
+        proxyManager.setDestination(destinationInput);
+        proxyManager.isProxyOpen = true;
+        proxyManager.reloadIframe();
+        return true;
     }
 }
 

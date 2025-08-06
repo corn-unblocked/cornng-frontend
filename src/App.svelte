@@ -23,11 +23,9 @@
     let isConfigOpen = $state(false);
 
     function startProxy() {
-        if (proxyManager.proxyUrl === "") return;
-        proxyManager.setDestination(destinationInput);
-        proxyManager.isProxyOpen = true;
-        destinationInput = "";
-        proxyManager.reloadIframe();
+        if (proxyManager.startProxy(destinationInput)) {
+            destinationInput = "";
+        }
     }
 </script>
 
@@ -66,13 +64,16 @@
                 class="tooltip w-1/8 min-w-30"
                 data-tip={proxyManager.proxyUrl === ""
                     ? "Proxy URL not found! Go to settings and configure proxy server"
-                    : ""}
+                    : !proxyManager.serviceWorker
+                      ? "Service worker not ready! Please wait"
+                      : ""}
             >
                 <button
                     class="btn w-1/1 pointer-events-auto"
                     title="Start proxy"
                     onclick={startProxy}
-                    disabled={proxyManager.proxyUrl === ""}>Start</button
+                    disabled={proxyManager.proxyUrl === "" ||
+                        !proxyManager.serviceWorker}>Start</button
                 >
             </span>
         </div>
