@@ -9,9 +9,6 @@
 </head>
 
 <body>
-    <script src="baremux/index.js"></script>
-    <script src="baremod/index.js"></script>
-    <script src="libcurl/index.js"></script>
     <script src="uv/uv.bundle.js"></script>
     <script src="uv/uv.config.js"></script>
 
@@ -24,6 +21,7 @@
 
         // stfu vite
         proxyManager.uvConfig = __uv$config;
+        proxyManager.initializeProxy();
 
         const app = mount(App, {
             target: document.getElementById('app')

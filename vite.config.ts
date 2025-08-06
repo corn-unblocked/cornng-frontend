@@ -16,20 +16,20 @@ export default defineConfig({
         viteStaticCopy({
             targets: [
                 {
-                    src: uvPath + "/*",
+                    src: uvPath + "/*.*js",
                     dest: "uv",
                     overwrite: false, // preserve our custom uv.config.js
                 },
                 {
-                    src: bareModulePath + "/*",
+                    src: bareModulePath + "/*.*js",
                     dest: "baremod",
                 },
                 {
-                    src: libcurlPath + "/*",
+                    src: libcurlPath + "/*.*js",
                     dest: "libcurl",
                 },
                 {
-                    src: baremuxPath + "/*",
+                    src: baremuxPath + "/*.*js",
                     dest: "baremux",
                 },
             ]

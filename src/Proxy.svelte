@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { splashText } from "./corn";
     import Navbar from "./Navbar.svelte";
     import proxyManager from "./proxy.svelte";
 
@@ -17,10 +18,13 @@
         "allow-pointer-lock allow-presentation allow-same-origin allow-scripts allow-storage-access-by-user-activation";
 
     function onIframeLoad() {
-        iframeHasLoaded = true;
+        // idek how this can happen but apparently it can
+        if (iframe == undefined) return;
         // do not set proxyManager.url if the iframe hasn't hooked into the manager yet
         const src = iframe.contentWindow.location.pathname;
         if (!src.includes(proxyManager.uvConfig.prefix)) return;
+
+        iframeHasLoaded = true;
         proxyManager.url = proxyManager.uvConfig.decodeUrl(
             src.slice(proxyManager.uvConfig.prefix.length),
         );
@@ -30,9 +34,10 @@
 <div class="w-screen h-screen fixed top-0 left-0">
     {#if !iframeHasLoaded}
         <div
-            class="bg-base-200 w-full h-full flex flex-row align-center justify-center"
+            class="bg-base-200 w-full h-full flex flex-col items-center justify-center gap-20"
         >
             <span class="loading loading-spinner loading-xl"></span>
+            <p>{splashText[Math.floor(Math.random() * splashText.length)]}</p>
         </div>
     {/if}
     <iframe

@@ -3,6 +3,7 @@ import ProxyComponent from "./Proxy.svelte";
 import config from "./config.svelte";
 import { httpUrlToWebSocket } from "./util";
 import autoProxyProber from "./prober.svelte";
+import { adBlocklist } from "./adBlocklist";
 
 interface UvConfig {
     prefix: string;
@@ -17,13 +18,55 @@ interface UvConfig {
     loc: string;
 }
 
+export class ServiceWorkerConfig {
+    blocklist: Set<string> = new Set();
+
+    constructor(adblock: boolean) {
+        if (adblock) this.blocklist = new Set(adBlocklist);
+    }
+}
+
 export class ProxyManager {
-    // set in App.svelte
+    // set in index.html
     uvConfig: UvConfig;
+    bareMuxConnection: BareMuxConnection;
+    swBroadcastChannel: BroadcastChannel;
+    serviceWorker: ServiceWorker | null = $state(null);
+
+    constructor() {
+        this.swBroadcastChannel = new BroadcastChannel("UvServiceWorker");
+        this.swBroadcastChannel.addEventListener("message", (() => {
+            navigator.serviceWorker.getRegistration(this.uvConfig.sw).then(((sw: ServiceWorkerRegistration) => {
+                this.serviceWorker = sw.active;
+                this.updateSWConfig(new ServiceWorkerConfig(config.adblock));
+            }).bind(this));
+        }).bind(this));
+    }
+
+    async initializeProxy() {
+        this.bareMuxConnection = new BareMuxConnection(this.uvConfig.loc + "/baremux/worker.js");
+        await this.registerSW();
+        await this.setProxyServer(this.proxyUrl);
+    }
+
+    async setProxyServer(proxyUrl: string) {
+        if (proxyUrl == "") return;
+        const loc = this.uvConfig.loc;
+
+        if (config.useBare) {
+            this.bareMuxConnection.setTransport(loc + "/baremod/index.mjs", [
+                proxyUrl
+            ]);
+        } else {
+            // set to websocket protocol
+            this.bareMuxConnection.setTransport(loc + "/libcurl/index.mjs", [
+                { wisp: httpUrlToWebSocket(proxyUrl) },
+            ]);
+        }
+    }
 
     // set when ProxyComponent loads
     proxyComponent: ProxyComponent | undefined;
-    bareMuxConnection: BareMuxConnection | undefined;
 
     isProxyOpen: boolean = $state(false);
     
@@ -77,37 +120,27 @@ export class ProxyManager {
 
             throw new Error("Your browser doesn't support service workers.");
         }
-        // do not reregister
-        if (
-            (await navigator.serviceWorker.getRegistrations()).some(
-                (x) =>
-                    x.active !== null &&
-                    x.active.scriptURL == this.uvConfig.stockSW,
-            )
-        )
-            return;
-        await navigator.serviceWorker.register(this.uvConfig.stockSW);
+
+        let sw = await navigator.serviceWorker.register(this.uvConfig.stockSW);
+        if (sw.active) {
+            this.serviceWorker = sw.active;
+            this.updateSWConfig(new ServiceWorkerConfig(config.adblock));
+        }
     }
 
-    async startProxy() {
-        const loc = this.uvConfig.loc;
+    async updateSWConfig(cfg: ServiceWorkerConfig) {
+        if (!this.serviceWorker) return;
+        this.serviceWorker.postMessage(cfg);
+    }
 
-        if (this.bareMuxConnection == undefined) this.bareMuxConnection = new BareMuxConnection(loc + "/baremux/worker.js");
-
-        await this.registerSW();
-
-        if (config.useBare) {
-            await this.bareMuxConnection.setTransport(loc + "/baremod/index.mjs", [
-                this.proxyUrl
-            ]);
-        } else {
-            // set to websocket protocol
-            await this.bareMuxConnection.setTransport(loc + "/libcurl/index.mjs", [
-                { wisp: httpUrlToWebSocket(this.proxyUrl) },
-            ]);
-        }
-
-        this.reloadIframe();
+    startProxy(destinationInput: string): boolean {
+        // poke the service worker to get it started up again
+        if (proxyManager.proxyUrl === "" || !proxyManager.serviceWorker)
+            return false;
+        proxyManager.setDestination(destinationInput);
+        proxyManager.isProxyOpen = true;
+        proxyManager.reloadIframe();
+        return true;
     }
 }
 

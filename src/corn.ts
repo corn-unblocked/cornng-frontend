@@ -1,3 +1,5 @@
+// corn.ts - Edit this file to customize the website
+
 export const bareProxyUrls = {
     auto: "Auto",
     custom: "Custom",
@@ -34,9 +36,28 @@ export const wispProxyUrls = {
     "wss://anura.pro/": "Anura 1",
     "wss://adoptmy.baby/": "Anura 2",
     "wss://wallstjournal.click/": "Anura 3",
+    "wss://mexicoon.top/": "Anura 4",
+    "wss://onlineosdev.nl/": "Anura 5",
+    "wss://swordartii.online/": "Anura 6",
     "wss://phantom.lol/wisp/": "Phantom",
     "wss://wisp.mercurywork.shop/": "Mercury",
     "wss://quantumchemistry.club/wisp/": "Terbium2 1",
     "wss://explorechemistry.online/wisp/": "Terbium2 2",
     "wss://webmath.help/wisp/": "Terbium2 3",
+    "wss://radiusproxy.app/wisp/": "Radius 1",
+    "wss://radiusproxy.app/adblock/": "Radius 1 (Adblock)",
+    "wss://radiusowski.site/wisp/": "Radius 2",
+    "wss://radiusowski.site/adblock/": "Radius 2 (Adblock)",    
 };
+
+export const splashText = [
+    "I'm fine?",
+    "Icl ts pmo",
+    "Get back to work brochacho",
+    "Bugs should be expected",
+    "Free and open-source",
+    "Krish you owe me $10",
+    "Try the improved top-right navbar dropdown!",
+    "Made with love by zeroxoneafour",
+    "How's Ivey still alive bro",
+];
