@@ -28,3 +28,8 @@ self.addEventListener('fetch', (event) => {
 self.addEventListener("message", (event) => {
     config = event.data;
 });
+
+self.addEventListener("activate", () => {
+    const bc = new BroadcastChannel("UvServiceWorker");
+    bc.postMessage("Active");
+});

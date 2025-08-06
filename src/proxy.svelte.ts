@@ -30,7 +30,18 @@ export class ProxyManager {
     // set in index.html
     uvConfig: UvConfig;
     bareMuxConnection: BareMuxConnection;
+    swBroadcastChannel: BroadcastChannel;
     serviceWorker: ServiceWorker | null = $state(null);
+
+    constructor() {
+        this.swBroadcastChannel = new BroadcastChannel("UvServiceWorker");
+        this.swBroadcastChannel.addEventListener("message", (() => {
+            navigator.serviceWorker.getRegistration(this.uvConfig.sw).then(((sw: ServiceWorkerRegistration) => {
+                this.serviceWorker = sw.active;
+                this.updateSWConfig(new ServiceWorkerConfig(config.adblock));
+            }).bind(this));
+        }).bind(this));
+    }
 
     async initializeProxy() {
         this.bareMuxConnection = new BareMuxConnection(this.uvConfig.loc + "/baremux/worker.js");
@@ -111,10 +122,10 @@ export class ProxyManager {
         }
 
         let sw = await navigator.serviceWorker.register(this.uvConfig.stockSW);
-        // wait for the service worker to activate
-        while (!sw.active);
-        this.serviceWorker = sw.active;
-        this.updateSWConfig(new ServiceWorkerConfig(config.adblock));
+        if (sw.active) {
+            this.serviceWorker = sw.active;
+            this.updateSWConfig(new ServiceWorkerConfig(config.adblock));
+        }
     }
 
     async updateSWConfig(cfg: ServiceWorkerConfig) {
