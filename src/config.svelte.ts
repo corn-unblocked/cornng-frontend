@@ -6,7 +6,7 @@ class SaveableConfig {
     bareSelectedProxy: string;
     bareCustomProxy: string;
     probeTimeout: number;
-
+    adblock: boolean;
 }
 
 export class Config {
@@ -21,6 +21,7 @@ export class Config {
     public bareCustomProxy: string = $state("");
     // auto detect proxy timeout (ms)
     public probeTimeout: number = $state(5000);
+    public adblock: boolean = $state(false);
 }
 
 export function saveConfig(cfg: Config): void {
@@ -32,6 +33,7 @@ export function saveConfig(cfg: Config): void {
         bareSelectedProxy: cfg.bareSelectedProxy,
         bareCustomProxy: cfg.bareCustomProxy,
         probeTimeout: cfg.probeTimeout,
+        adblock: cfg.adblock,
     }));
 }
 

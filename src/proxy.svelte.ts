@@ -3,6 +3,7 @@ import ProxyComponent from "./Proxy.svelte";
 import config from "./config.svelte";
 import { httpUrlToWebSocket } from "./util";
 import autoProxyProber from "./prober.svelte";
+import { adBlocklist } from "./adBlocklist";
 
 interface UvConfig {
     prefix: string;
@@ -17,13 +18,43 @@ interface UvConfig {
     loc: string;
 }
 
+export class ServiceWorkerConfig {
+    blocklist: Set<string> = new Set();
+
+    constructor(adblock: boolean) {
+        if (adblock) this.blocklist = new Set(adBlocklist);
+    }
+}
+
 export class ProxyManager {
     // set in App.svelte
     uvConfig: UvConfig;
+    bareMuxConnection: BareMuxConnection;
+
+    async initializeProxy() {
+        this.bareMuxConnection = new BareMuxConnection(this.uvConfig.loc + "/baremux/worker.js");
+        await this.registerSW();
+        await this.setProxyServer(this.proxyUrl);
+    }
+
+    async setProxyServer(proxyUrl: string) {
+        if (proxyUrl == "") return;
+        const loc = this.uvConfig.loc;
+
+        if (config.useBare) {
+            this.bareMuxConnection.setTransport(loc + "/baremod/index.mjs", [
+                proxyUrl
+            ]);
+        } else {
+            // set to websocket protocol
+            this.bareMuxConnection.setTransport(loc + "/libcurl/index.mjs", [
+                { wisp: httpUrlToWebSocket(proxyUrl) },
+            ]);
+        }
+    }
 
     // set when ProxyComponent loads
     proxyComponent: ProxyComponent | undefined;
-    bareMuxConnection: BareMuxConnection | undefined;
 
     isProxyOpen: boolean = $state(false);
     
@@ -77,28 +108,15 @@ export class ProxyManager {
 
             throw new Error("Your browser doesn't support service workers.");
         }
-        await navigator.serviceWorker.register(this.uvConfig.stockSW);
+
+        let sw = await navigator.serviceWorker.register(this.uvConfig.stockSW);
+        this.updateSWConfig(new ServiceWorkerConfig(config.adblock), sw);
     }
 
-    async startProxy() {
-        const loc = this.uvConfig.loc;
-
-        if (this.bareMuxConnection == undefined) this.bareMuxConnection = new BareMuxConnection(loc + "/baremux/worker.js");
-
-        await this.registerSW();
-
-        if (config.useBare) {
-            await this.bareMuxConnection.setTransport(loc + "/baremod/index.mjs", [
-                this.proxyUrl
-            ]);
-        } else {
-            // set to websocket protocol
-            await this.bareMuxConnection.setTransport(loc + "/libcurl/index.mjs", [
-                { wisp: httpUrlToWebSocket(this.proxyUrl) },
-            ]);
-        }
-
-        this.reloadIframe();
+    async updateSWConfig(cfg: ServiceWorkerConfig, optSw?: ServiceWorkerRegistration) {
+        let sw = optSw ?? (await navigator.serviceWorker.getRegistrations())[0];
+        if (sw == undefined) return;
+        sw.active?.postMessage(cfg);
     }
 }
 

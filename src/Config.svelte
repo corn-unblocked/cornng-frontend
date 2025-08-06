@@ -1,6 +1,7 @@
 <script lang="ts">
     import config, { saveConfig } from "./config.svelte";
     import { bareProxyUrls, wispProxyUrls } from "./corn";
+    import proxyManager, { ServiceWorkerConfig } from "./proxy.svelte";
 
     let { isConfigOpen = $bindable() }: { isConfigOpen: boolean } = $props();
     let modalElement: HTMLDialogElement = $state();
@@ -15,6 +16,10 @@
         } else {
             modalElement.close();
         }
+    });
+
+    $effect(() => {
+        proxyManager.updateSWConfig(new ServiceWorkerConfig(config.adblock));
     });
 </script>
 
@@ -87,7 +92,7 @@
                 </div>
                 <p class="flex items-center justify-center">Custom Proxy URL</p>
                 <input
-                    class="input w-1/1"
+                    class="input w-1/1 text-center"
                     bind:value={
                         () =>
                             config.useBare
@@ -102,6 +107,14 @@
                         }
                     }
                 />
+                <p class="flex items-center justify-center">Adblock</p>
+                <div class="flex items-center justify-center">
+                    <input
+                        type="checkbox"
+                        class="toggle"
+                        bind:checked={config.adblock}
+                    />
+                </div>
             </div>
         </div>
         <button class="btn" onclick={() => (isConfigOpen = false)}>Close</button

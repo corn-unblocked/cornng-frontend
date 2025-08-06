@@ -18,6 +18,8 @@
         "allow-pointer-lock allow-presentation allow-same-origin allow-scripts allow-storage-access-by-user-activation";
 
     function onIframeLoad() {
+        // idek how this can happen but apparently it can
+        if (iframe == undefined) return;
         // do not set proxyManager.url if the iframe hasn't hooked into the manager yet
         const src = iframe.contentWindow.location.pathname;
         if (!src.includes(proxyManager.uvConfig.prefix)) return;

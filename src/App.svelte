@@ -14,6 +14,10 @@
         }
     });
 
+    $effect(() => {
+        proxyManager.setProxyServer(proxyManager.proxyUrl);
+    });
+
     let destinationInput = $state("");
 
     let isConfigOpen = $state(false);
@@ -22,8 +26,8 @@
         if (proxyManager.proxyUrl === "") return;
         proxyManager.setDestination(destinationInput);
         proxyManager.isProxyOpen = true;
-        proxyManager.startProxy();
         destinationInput = "";
+        proxyManager.reloadIframe();
     }
 </script>
 
