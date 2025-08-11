@@ -34,10 +34,15 @@
 <div class="w-screen h-screen fixed top-0 left-0">
     {#if !iframeHasLoaded}
         <div
-            class="bg-base-200 w-full h-full flex flex-col items-center justify-center gap-20"
+            class="bg-base-200 w-full h-full flex flex-col items-center justify-center gap-5"
         >
-            <span class="loading loading-spinner loading-xl"></span>
+            <span class="loading loading-spinner loading-xl mb-15"></span>
             <p>{splashText[Math.floor(Math.random() * splashText.length)]}</p>
+            <button
+                class="btn"
+                onclick={() => (proxyManager.isProxyOpen = false)}
+                >Not working? Click here to go back</button
+            >
         </div>
     {/if}
     <iframe

@@ -90,7 +90,7 @@
                         {/each}
                     </ul>
                 </div>
-                {#if config.useBare ? config.bareSelectedProxy : config.wispSelectedProxy === "custom"}
+                {#if (config.useBare ? config.bareSelectedProxy : config.wispSelectedProxy) === "custom"}
                     <p class="flex items-center justify-center">
                         Custom Proxy URL
                     </p>
@@ -115,7 +115,7 @@
                 <div class="flex items-center justify-center">
                     <input
                         type="checkbox"
-                        class="toggle"
+                        class="checkbox"
                         bind:checked={config.adblock}
                     />
                 </div>
