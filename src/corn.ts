@@ -56,7 +56,6 @@ export const splashText = [
     "Get back to work brochacho",
     "Bugs should be expected",
     "Free and open-source",
-    "Krish you owe me $10",
     "Try the improved top-right navbar dropdown!",
     "Made with love by zeroxoneafour",
     "How's Ivey still alive bro",
